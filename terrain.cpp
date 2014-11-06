@@ -7,9 +7,11 @@
 #include "terrain.h"
 #include "global.h"
 #include "first.h"
+
   int SCALE=1,HEIGHTSCALE=1;
 typedef float f;
 float frustum[6][4];
+
 
 //double floorsize;
 		//!< This field stores the information of the frustum used for culling
@@ -160,11 +162,12 @@ void terrain :: Read(void){
 	 	 			Texture a(textures.c_str());
 	 	 			a.Terrainid=a.LoadImage();
 	 	 			ad=a;
+          return;
 
 }
 void terrain :: Render(){
 
-Render1(ad);
+   return Render1(ad);
 
 }
 
@@ -181,16 +184,20 @@ void terrain :: Render1(Texture a)
 	glBindTexture(GL_TEXTURE_2D, (ad).Terrainid);
 	// int w=(ad).terrainwidth;
 	// int h=(ad).terrainheight;
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
   glBegin(GL_QUADS);
   glTexCoord2f(0,0);
+  glNormal3f(0,0,1);
   glVertex3f(0,0,0);
   glTexCoord2f(0,1);
+  glNormal3f(0,0,1);
   glVertex3f(0,10,0);
   glTexCoord2f(1,1);
+  glNormal3f(0,0,1);
   glVertex3f(10,10,0);
   glTexCoord2f(1,0);
+  glNormal3f(0,0,1);
   glVertex3f(10,0,0);
   glEnd();
 
@@ -221,6 +228,7 @@ void terrain :: Render1(Texture a)
 
 
 	glDisable(GL_TEXTURE_2D);
+  return ;
 	//glFlush();
 }
 

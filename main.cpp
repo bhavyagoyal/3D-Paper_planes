@@ -1,5 +1,5 @@
 
-
+#include "obj1.h"
 #include "global.h"
 #include "terrain.h"
 #define refreshMills 10
@@ -9,9 +9,14 @@ using namespace std;
 
 terrain a;
 bool* keyStates = new bool[256];
-
+GLuint object1;
+Objectrender dirtbike("quad.obj","ball.bmp");
+double x;
 void keyOperations (void) {
 if (keyStates[GLUT_KEY_F5]) {
+  x+=10;
+  if(x>360)
+    x-=360;
 
 }
 }
@@ -33,6 +38,8 @@ void display(void)
    glLoadIdentity();
     gluLookAt(0,-40,20,0,0,0,0,0,1);
    a.Render();
+   glRotatef(x,0,0,1);
+   dirtbike.Render();
    glFlush ();
    glutSwapBuffers();
 }
@@ -49,8 +56,21 @@ void init()
    glEnable(GL_LIGHTING);
    glEnable(GL_NORMALIZE);
    glEnable(GL_DEPTH_TEST);
-   a.textures="t.bmp";
+   a.textures="ball.bmp";
+   x=0;
    a.Read();
+   // 	object1 = glGenLists(1);
+		//  		glNewList(object1, GL_COMPILE);
+		//  		   dirtbike.Render();
+		//  		   glEndList();
+    GLfloat mat_specular[] = { 1, 1,1, 1};
+
+
+ GLfloat light_position[] = { 0, 40, 0.0, 1.0 };
+ glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_specular);
+  // glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_shininess);
+   	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+     glEnable(GL_LIGHT0);
 }
 
 
