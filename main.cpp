@@ -1,22 +1,14 @@
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-#include <math.h>
-#include <iostream>
-#include <vector>
-#include <stdio.h>
-#include <algorithm>
-#include "math.h"
-#include <stdlib.h> 
-#include <utility>
-#include <unistd.h>
-#include <climits>
-#include "global.h"
 
-using namespace std;
+
+#include "global.h"
+#include "terrain.h"
 #define refreshMills 10
 
-bool* keyStates = new bool[256]; 
+using namespace std;
+
+
+terrain a;
+bool* keyStates = new bool[256];
 
 void keyOperations (void) {
 if (keyStates[GLUT_KEY_F5]) {
@@ -24,12 +16,12 @@ if (keyStates[GLUT_KEY_F5]) {
 }
 }
 
-void keyPressed (int key, int x, int y) {  
-keyStates[key] = true; 
-}  
-  
-void keyUp (int key, int x, int y) {  
-keyStates[key] = false; 
+void keyPressed (int key, int x, int y) {
+keyStates[key] = true;
+}
+
+void keyUp (int key, int x, int y) {
+keyStates[key] = false;
 }
 /*********************************DISPLAY*********************************/
 
@@ -39,6 +31,8 @@ void display(void)
    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
+    gluLookAt(0,-40,20,0,0,0,0,0,1);
+   a.Render();
    glFlush ();
    glutSwapBuffers();
 }
@@ -55,6 +49,8 @@ void init()
    glEnable(GL_LIGHTING);
    glEnable(GL_NORMALIZE);
    glEnable(GL_DEPTH_TEST);
+   a.textures="t.bmp";
+   a.Read();
 }
 
 
@@ -83,11 +79,11 @@ int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-   glutInitWindowSize (500, 500); 
+   glutInitWindowSize (500, 500);
    glutInitWindowPosition (100, 100);
    glutCreateWindow("Paper Planes");
    init ();
-   glutDisplayFunc(display); 
+   glutDisplayFunc(display);
    glutReshapeFunc(reshape);
    glutSpecialFunc(keyPressed);
    glutSpecialUpFunc(keyUp);
@@ -96,4 +92,3 @@ int main(int argc, char** argv)
    glutMainLoop();
    return 0;
 }
-
