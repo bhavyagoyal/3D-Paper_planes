@@ -14,4 +14,6 @@
 #include <string>
 
 #include "terrain.h"
-extern terrain a;
+extern terrain a,b,c;
+extern int front;
+//extern double objy;

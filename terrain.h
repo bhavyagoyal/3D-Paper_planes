@@ -1,9 +1,3 @@
-/*
- * terrain.h
- *
- *  Created on: 7 Aug 2013
- *      Author: shivam
- */
 
 #ifndef TERRAIN_H_
 #define TERRAIN_H_

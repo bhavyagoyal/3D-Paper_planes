@@ -69,7 +69,7 @@ GLuint Objectrender :: LoadBMP(char* pic)
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glGenTextures(1, &g);
         glBindTexture(GL_TEXTURE_2D, g);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
        for(int i=0;i+2<terrainwidth*terrainheight*3;i+=3)
         {	GLubyte temp;
             temp=data[i+2];
@@ -100,7 +100,7 @@ GLuint Objectrender :: LoadTGA(char * pic)
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	 glGenTextures(1, &g);
 	        glBindTexture(GL_TEXTURE_2D, g);
-	        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL	);
 	        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	        glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	        glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -119,8 +119,8 @@ void Objectrender::Render(void)
 s=LoadImage(filepath);
 glEnable(GL_TEXTURE_2D);
 glBindTexture(GL_TEXTURE_2D, s);
-glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-glmDraw(myModel,GLM_MATERIAL | GLM_SMOOTH | GLM_TEXTURE);
+glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+glmDraw(myModel,GLM_SMOOTH | GLM_TEXTURE | GLM_MATERIAL);
 glDisable(GL_TEXTURE_2D);
 
 
@@ -137,7 +137,12 @@ Objectrender :: Objectrender (char * g,char * j)
 	objpath=g;
 	filepath=j;
 	myModel = glmReadOBJ(objpath);
-	//glmUnitize(myModel);
+	glmUnitize(myModel);
 	glmFacetNormals(myModel);
-	glmVertexNormals(myModel, 90.0);
+	glmVertexNormals(myModel, -90.0);
+}
+
+Objectrender :: Objectrender()
+{
+
 }

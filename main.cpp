@@ -7,17 +7,22 @@
 using namespace std;
 
 
-terrain a;
+terrain a,b,c;
+int front=1;
 bool* keyStates = new bool[256];
 GLuint object1;
-Objectrender dirtbike("quad.obj","ball.bmp");
-double x;
+
+double x,t1,t2,t3,planey;
 void keyOperations (void) {
 if (keyStates[GLUT_KEY_F5]) {
   x+=10;
   if(x>360)
     x-=360;
 
+}
+if(keyStates[GLUT_KEY_F4])
+{
+	planey+=10;
 }
 }
 
@@ -36,10 +41,41 @@ void display(void)
    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
-    gluLookAt(0,-40,20,0,0,0,0,0,1);
-   a.Render();
-   glRotatef(x,0,0,1);
-   dirtbike.Render();
+    gluLookAt(0,-4+planey,2,0,planey,0,0,0,1);
+    glPushMatrix();
+    glTranslatef(0,t1,0);
+    a.Render();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0,t2,0);
+    b.Render();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0,t3,0);
+   	c.Render();
+   	glPopMatrix();
+   if(front==1 && planey>(t1+(t2-t1)/2))
+   {
+   	front=2;
+   	t1+=120;
+
+   }
+   else if(front==2 && planey>(t2+(t3-t2)/2))
+   {
+   	front=3;
+   	t2+=120;
+   }
+   else if(planey>(t3+(t1-t3)/2))
+   {
+   	front=1;
+   	t3+=120;
+   }
+   cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
+   cout << "planey "<<planey << endl; 
+   glTranslatef(0,planey,0);
+   glRotatef(x,1,0,0);
+   glCallList(object1);
+   //dirtbike.Render();
    glFlush ();
    glutSwapBuffers();
 }
@@ -57,16 +93,22 @@ void init()
    glEnable(GL_NORMALIZE);
    glEnable(GL_DEPTH_TEST);
    a.textures="ball.bmp";
-   x=0;
+   b.textures="wall.bmp";
+   c.textures="tex.bmp";
+   x=0;t1=0;t2=40;t3=80;planey=0;
+   Objectrender dirtbike("toru.obj","wall.bmp");
+   cerr << "error crossed"<< endl;
    a.Read();
-   // 	object1 = glGenLists(1);
-		//  		glNewList(object1, GL_COMPILE);
-		//  		   dirtbike.Render();
-		//  		   glEndList();
-    GLfloat mat_specular[] = { 1, 1,1, 1};
+   b.Read();
+   c.Read();
+   object1 = glGenLists(1);
+   glNewList(object1, GL_COMPILE);
+   dirtbike.Render();
+   glEndList();
+   GLfloat mat_specular[] = { 1, 1,1, 1};
 
 
- GLfloat light_position[] = { 0, 40, 0.0, 1.0 };
+ GLfloat light_position[] = { 100, 100, 100.0, 1.0 };
  glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_specular);
   // glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_shininess);
    	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
@@ -97,6 +139,7 @@ void timer(int value) {
 
 int main(int argc, char** argv)
 {
+   cerr<< "init "<< endl;
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
    glutInitWindowSize (500, 500);

@@ -189,16 +189,16 @@ void terrain :: Render1(Texture a)
   glBegin(GL_QUADS);
   glTexCoord2f(0,0);
   glNormal3f(0,0,1);
-  glVertex3f(0,0,0);
+  glVertex3f(-20,-20,0);
   glTexCoord2f(0,1);
   glNormal3f(0,0,1);
-  glVertex3f(0,10,0);
+  glVertex3f(-20,20,0);
   glTexCoord2f(1,1);
   glNormal3f(0,0,1);
-  glVertex3f(10,10,0);
+  glVertex3f(20,20,0);
   glTexCoord2f(1,0);
   glNormal3f(0,0,1);
-  glVertex3f(10,0,0);
+  glVertex3f(20,-20,0);
   glEnd();
 
 //

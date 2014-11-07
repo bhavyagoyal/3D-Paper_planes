@@ -18,6 +18,9 @@
 #include <string.h>
 #include <assert.h>
 #include "glm.h"
+#include <iostream>
+
+using namespace std;
 
 
 #define T(x) (model->triangles[(x)])
@@ -208,10 +211,13 @@ GLuint
 glmFindMaterial(GLMmodel* model, char* name)
 {
   GLuint i;
-
+  cerr << "in materials"<< endl;
   /* XXX doing a linear search on a string key'd list is pretty lame,
      but it works and is fast enough for now. */
   for (i = 0; i < model->nummaterials; i++) {
+    cerr << "in loop "<< endl;
+    cerr << model->materials[i].name << " "<< name << " check "<<model->nummaterials <<" i value " <<i<<endl;
+    cerr << strcmp(model->materials[i].name, name)<< "  ans to query"<< endl;
     if (!strcmp(model->materials[i].name, name))
       goto found;
   }
@@ -222,6 +228,7 @@ glmFindMaterial(GLMmodel* model, char* name)
   i = 0;
 
 found:
+  cerr << "in materials1"<< endl;
   return i;
 }
 
@@ -1365,7 +1372,7 @@ glmReadOBJ(char* filename)
   /* make a first pass through the file to get a count of the number
      of vertices, normals, texcoords & triangles */
   glmFirstPass(model, file);
-
+cerr << "crossed this "<< endl;
   /* allocate memory */
   model->vertices = (GLfloat*)malloc(sizeof(GLfloat) *
 				     3 * (model->numvertices + 1));
@@ -1390,12 +1397,12 @@ glmReadOBJ(char* filename)
     model->texcoords = (GLfloat*)malloc(sizeof(GLfloat) *
 					2 * (model->numtexcoords + 1));
   }
-
+cerr << "fail here"<< endl;
   /* rewind to beginning of file and read in the data this pass */
   rewind(file);
 
   glmSecondPass(model, file);
-
+cerr << "fail not here"<< endl;
   /* close the file */
   fclose(file);
 
