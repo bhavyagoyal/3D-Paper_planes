@@ -7,12 +7,13 @@
 using namespace std;
 
 
-terrain a,b,c;
+terrain a("hm.bmp","tex.bmp"),b("ball.bmp","ball.bmp"),c("tex.bmp","wall.bmp");
 int front=1;
 bool* keyStates = new bool[256];
-GLuint object1;
+GLuint object1,terrain1,terrain2,terrain3;
 
 double x,t1,t2,t3,planey;
+GLfloat aspect;
 void keyOperations (void) {
 if (keyStates[GLUT_KEY_F5]) {
   x+=10;
@@ -37,44 +38,90 @@ keyStates[key] = false;
 
 void display(void)
 {
+   
+
+
    keyOperations();
    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   
+// 	glMatrixMode(GL_PROJECTION);
+// 	glLoadIdentity();
+// 	 glOrtho(-100,100,-100,100,-100,100);
+// 	// glPopMatrix();
+// 	 glMatrixMode(GL_MODELVIEW);
+//    glLoadIdentity();
+// a.Render();
+glMatrixMode(GL_PROJECTION);
+	 glLoadIdentity();
+	 gluPerspective(60.0f, aspect, 0.05f, 1000.0f);
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
-    gluLookAt(0,-4+planey,2,0,planey,0,0,0,1);
+    gluLookAt(0,-20+planey,10,0,planey,0,0,0,1);
     glPushMatrix();
     glTranslatef(0,t1,0);
-    a.Render();
+   // a.Render();
+    glCallList(terrain1);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0,t2,0);
-    b.Render();
+   glCallList(terrain2);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0,t3,0);
-   	c.Render();
+   	//c.Render();
+   	glCallList(terrain3);
    	glPopMatrix();
-   if(front==1 && planey>(t1+(t2-t1)/2))
+   if(front==1 && planey>(t1+(a.terrainwidth)*0.1/2)+20)
    {
    	front=2;
-   	t1+=120;
+   	t1+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*0.1;
 
    }
-   else if(front==2 && planey>(t2+(t3-t2)/2))
+   else if(front==2 && planey>(t2+(b.terrainwidth)*0.1/2)+20)
    {
    	front=3;
-   	t2+=120;
+   	t2+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*0.1;
    }
-   else if(planey>(t3+(t1-t3)/2))
+   else if(planey>(t3+(c.terrainwidth)*0.1/2)+20)
    {
    	front=1;
-   	t3+=120;
+   	t3+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*0.1;
    }
    cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
-   cout << "planey "<<planey << endl; 
+   cout << "planey "<<planey << endl;
+   glPushMatrix();
    glTranslatef(0,planey,0);
    glRotatef(x,1,0,0);
-   glCallList(object1);
+ 
+  glCallList(object1);
+ //   glMatrixMode(GL_PROJECTION);
+	// glLoadIdentity();
+	//  glOrtho(-100,100,-100,100,-100,100);
+	// // glPopMatrix();
+	//  glMatrixMode(GL_MODELVIEW);
+ //   glLoadIdentity();
+  	glPopMatrix(); 
+  glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, a.ad.Terrainid);
+	// int w=(ad).terrainwidth;
+	// int h=(ad).terrainheight;
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+//HUD Code here***************************************************************************************************
+  // glBegin(GL_QUADS);
+  // glTexCoord2f(0,0);
+  // glNormal3f(0,0,1);
+  // glVertex3f(-200,1000,-200);
+  // glTexCoord2f(0,1);
+  // glNormal3f(0,0,1);
+  // glVertex3f(-200,1000,200);
+  // glTexCoord2f(1,1);
+  // glNormal3f(0,0,1);
+  // glVertex3f(200,1000,200);
+  // glTexCoord2f(1,0);
+  // glNormal3f(0,0,1);
+  // glVertex3f(200,1000,-200);
+  // glEnd();
+
    //dirtbike.Render();
    glFlush ();
    glutSwapBuffers();
@@ -87,24 +134,40 @@ void display(void)
 void init()
 {
 
-   glClearColor (1.0, 1.0,1.0, 1.0);
+   for(int i=0;i<256;i++)
+   	keyStates[i]=false;
+   glClearColor (0.4, 0.4,1.0, 1.0);
    glShadeModel (GL_SMOOTH);
    glEnable(GL_LIGHTING);
    glEnable(GL_NORMALIZE);
    glEnable(GL_DEPTH_TEST);
-   a.textures="ball.bmp";
+   //a.textures="ball.bmp";
    b.textures="wall.bmp";
    c.textures="tex.bmp";
-   x=0;t1=0;t2=40;t3=80;planey=0;
+   
    Objectrender dirtbike("toru.obj","wall.bmp");
    cerr << "error crossed"<< endl;
    a.Read();
    b.Read();
    c.Read();
+   x=0;t1=0;t2=(a.terrainwidth)*0.1;t3=t2+(b.terrainwidth)*0.1;planey=0;
    object1 = glGenLists(1);
    glNewList(object1, GL_COMPILE);
    dirtbike.Render();
    glEndList();
+   terrain1 = glGenLists(12);
+   glNewList(terrain1, GL_COMPILE);
+   a.Render();
+   glEndList();
+   terrain2 = glGenLists(2);
+   glNewList(terrain2, GL_COMPILE);
+   b.Render();
+   glEndList();
+   terrain3 = glGenLists(23);
+   glNewList(terrain3, GL_COMPILE);
+   c.Render();
+   glEndList();
+   
    GLfloat mat_specular[] = { 1, 1,1, 1};
 
 
@@ -121,7 +184,7 @@ void init()
 void reshape (int w, int h)
 {
    if (h == 0) h = 1;                // To prevent divide by 0
-   GLfloat aspect = (GLfloat)w / (GLfloat)h;
+   aspect = (GLfloat)w / (GLfloat)h;
    glViewport (0, 0, (GLsizei) w, (GLsizei) h);
    glMatrixMode (GL_PROJECTION);
    glLoadIdentity();
@@ -139,7 +202,7 @@ void timer(int value) {
 
 int main(int argc, char** argv)
 {
-   cerr<< "init "<< endl;
+   //cerr<< "init "<< endl;
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
    glutInitWindowSize (500, 500);

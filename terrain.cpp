@@ -159,9 +159,24 @@ GLuint terr;																			//!< Stores the display list id of the terrain
 */
 void terrain :: Read(void){
 
-	 	 			Texture a(textures.c_str());
+	 	 			Texture a(textures);
 	 	 			a.Terrainid=a.LoadImage();
 	 	 			ad=a;
+          FILE * picfile;
+      picfile = fopen(heightmap, "rb");
+      if (picfile == NULL)
+      {
+        return ;
+      }
+      GLubyte * exp=(GLubyte*)malloc(54);
+      fread(exp,1,54,picfile);
+      terrainwidth=exp[18]+exp[19]*256.0+exp[20]*65536.0;
+      terrainheight=exp[22]+exp[23]*256.0+exp[24]*65536.0;
+      normals=new normal*[terrainwidth];
+      free(exp);
+      data = (GLubyte*)malloc(terrainwidth * terrainheight * 3);
+      fread(data,1, terrainwidth * terrainheight*3, picfile);
+      fclose(picfile);
           return;
 
 }
@@ -179,27 +194,61 @@ void terrain :: Render(){
 
 void terrain :: Render1(Texture a)
 {
-	ExtractFrustum();
+	//ExtractFrustum();
   glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, (ad).Terrainid);
-	// int w=(ad).terrainwidth;
-	// int h=(ad).terrainheight;
+	int w=(ad).terrainwidth;
+	int h=(ad).terrainheight;
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-  glBegin(GL_QUADS);
-  glTexCoord2f(0,0);
-  glNormal3f(0,0,1);
-  glVertex3f(-20,-20,0);
-  glTexCoord2f(0,1);
-  glNormal3f(0,0,1);
-  glVertex3f(-20,20,0);
-  glTexCoord2f(1,1);
-  glNormal3f(0,0,1);
-  glVertex3f(20,20,0);
-  glTexCoord2f(1,0);
-  glNormal3f(0,0,1);
-  glVertex3f(20,-20,0);
-  glEnd();
+  // glBegin(GL_QUADS);
+  // glTexCoord2f(0,0);
+  // glNormal3f(0,0,1);
+  // glVertex3f(-20,-20,0);
+  // glTexCoord2f(0,1);
+  // glNormal3f(0,0,1);
+  // glVertex3f(-20,20,0);
+  // glTexCoord2f(1,1);
+  // glNormal3f(0,0,1);
+  // glVertex3f(20,20,0);
+  // glTexCoord2f(1,0);
+  // glNormal3f(0,0,1);
+  // glVertex3f(20,-20,0);
+  // glEnd();
+  double SCALE=0.1;
+  double HEIGHTSCALE=0.1;
+  for(int j=0;j+1<terrainwidth-1;j++)
+      { int i=0;
+
+        while(i+1<terrainheight-1)
+        {
+              
+
+            //if(PointInFrustum(i*SCALE,getHeight(i,j),j*SCALE)){
+                
+              glBegin(GL_TRIANGLE_STRIP);
+                            glTexCoord2f(f(i)/terrainwidth,f(j)/terrainheight);
+                            //glNormal3f(normals[i][j].x,normals[i][j].y,normals[i][j].z);
+                            glVertex3f(i*SCALE,j*SCALE,data[(j)*terrainwidth*3+i*3+1]*SCALE*HEIGHTSCALE);
+
+                            glTexCoord2f(f(i+1.0)/terrainwidth,f(j)/terrainheight);
+                            //glNormal3f(normals[i+1][j].x,normals[i+1][j].y,normals[i+1][j].z);
+                            glVertex3f((i+1)*SCALE,j*SCALE,data[(j)*terrainwidth*3+(i+1)*3+1]*SCALE*HEIGHTSCALE);
+
+                            //glNormal3f(normals[i+1][j].x,normals[i+1][j].y,normals[i+1][j].z);
+                            glTexCoord2f(f(i)/terrainwidth,f(j+1)/terrainheight);
+                            glVertex3f(i*SCALE,(j+1)*SCALE,data[(j+1)*terrainwidth*3+i*3+1]*SCALE*HEIGHTSCALE);
+
+                            //glNormal3f(normals[i+1][j+1].x,normals[i+1][j+1].y,normals[i+1][j+1].z);
+                            glTexCoord2f(f(i+1)/terrainwidth,f(j+1)/terrainheight);
+                            glVertex3f((i+1)*SCALE,(j+1)*SCALE,data[(j+1)*terrainwidth*3+(i+1)*3+1]*SCALE*HEIGHTSCALE);
+
+                     glEnd();//}
+                            i++;
+              
+        }
+      }
+
 
 //
 // double sca=0.25;
@@ -266,4 +315,11 @@ GLfloat terrain :: getHeight(int i,int j){
 terrain :: terrain(void)
 {
 
+}
+
+terrain :: terrain(char *a, char *b)
+{
+  heightmap=a;
+  textures=b;
+                      
 }

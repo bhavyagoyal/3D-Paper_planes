@@ -31,13 +31,14 @@ struct bonus{
 class terrain
 {
 public:
+	char* heightmap;
 	GLubyte * data;																	/*!< This byte array stores the data of the image file in byte format and is used to determine the height of the terrain and in physics engine*/
 	int terrainwidth;																/*!< This field stores the width of the terrain*/
 	int terrainheight;																/*!< This field stores height of the terrain*/
-	string textures;																/*!< This array stores the name of the texture files which are to be mapped on the terrain and certain parts of HUD */
+	char *textures;																/*!< This array stores the name of the texture files which are to be mapped on the terrain and certain parts of HUD */
 	Texture  ad;																	/*!<  This array contains the processed texture data returned by the method in texture class and it is used to apply textures on different objects.*/
 	normal** normals;																/*!< This is a poinetr to an array of normals pointers storing normals at each point*/
-	char * pathname;																/*!< this character array stores the name of the file containing description of the path*/
+	string pathname;																/*!< this character array stores the name of the file containing description of the path*/
 	//bonus markers[300];																/*!/ This array stores the location of the markers on the track */
 public:
 	//! Renderer on Terrain with texture
@@ -73,6 +74,7 @@ public:
 	// terrain(char * pic);
 	//! Null constructor of terrain class
 	terrain(void);
+	terrain(char*,char*);
 
 	//! Computes height at any point in the terrain
 	/*!
