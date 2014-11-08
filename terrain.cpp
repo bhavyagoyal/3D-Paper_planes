@@ -7,6 +7,7 @@
 #include "terrain.h"
 #include "global.h"
 #include "first.h"
+#include "Vector3D.h"
 
  
 typedef float f;
@@ -157,12 +158,19 @@ GLuint terr;																			//!< Stores the display list id of the terrain
 /*!
 		This function reads the texture images specified in the terrain object and reads the heightmap. It fills the texture array with textures
 */
-void terrain :: Read(void){
 
-	 	 			Texture a(textures);
-	 	 			a.Terrainid=a.LoadImage();
-	 	 			ad=a;
-          FILE * picfile;
+
+Vector3D retvec(int i,int j,GLubyte* data,int terrainwidth)
+{
+  return Vector3D(i*SCALE,j*SCALE,data[(j)*terrainwidth*3+i*3+1]*SCALE*HEIGHTSCALE);
+}
+void terrain :: Read(void){
+      SCALE=0.2;
+      HEIGHTSCALE=0.1;
+ 			Texture a(textures);
+ 			a.Terrainid=a.LoadImage();
+ 			ad=a;
+      FILE * picfile;
       picfile = fopen(heightmap, "rb");
       if (picfile == NULL)
       {
@@ -177,6 +185,45 @@ void terrain :: Read(void){
       data = (GLubyte*)malloc(terrainwidth * terrainheight * 3);
       fread(data,1, terrainwidth * terrainheight*3, picfile);
       fclose(picfile);
+      Vector3D q,w,e,r;
+      normals[0]=new normal[terrainheight];
+      normals[terrainwidth-1]=new normal[terrainheight];
+      for(int i=1;i<terrainwidth-1;i++)
+      {
+        normals[i]=new normal[terrainheight];
+        for(int j=1;j<terrainheight-1;j++)
+        {
+            q=q.cross(retvec(i,j,data,terrainwidth)-retvec(i+1,j,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i,j+1,data,terrainwidth));
+            w=q.cross(retvec(i,j,data,terrainwidth)-retvec(i,j+1,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i-1,j,data,terrainwidth));
+            e=q.cross(retvec(i,j,data,terrainwidth)-retvec(i-1,j,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i,j-1,data,terrainwidth));
+            r=q.cross(retvec(i,j,data,terrainwidth)-retvec(i,j-1,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i+1,j,data,terrainwidth));
+            if(q.z<0)
+              q-=q;
+            if(w.z<0)
+              w-=w;
+            if(e.z<0)
+              e-=e;
+            if(r.z<0)
+              r-=r;
+            normals[i][j].x=(q.x+w.x+e.x+r.x)/4.0;
+            normals[i][j].y=(q.y+w.y+e.y+r.y)/4.0;
+            normals[i][j].z=(q.z+w.z+e.z+r.z)/4.0;
+
+        }
+      }
+      for(int j=0;j<terrainheight;j++)
+      {
+        normals[0][j]=normals[1][j];
+        normals[terrainwidth-1][j]=normals[terrainwidth-2][j];
+      }
+      for(int j=0;j<terrainwidth;j++)
+      {
+        normals[j][0]=normals[j][1];
+        normals[j][terrainheight-1]=normals[j][terrainheight-2];
+      }
+
+
+
           return;
 
 }
@@ -215,8 +262,7 @@ void terrain :: Render1(Texture a)
   // glNormal3f(0,0,1);
   // glVertex3f(20,-20,0);
   // glEnd();
-  SCALE=0.1;
-  HEIGHTSCALE=0.1;
+
   for(int j=0;j+1<terrainwidth-1;j++)
       { int i=0;
 
@@ -228,18 +274,18 @@ void terrain :: Render1(Texture a)
                 
               glBegin(GL_TRIANGLE_STRIP);
                             glTexCoord2f(f(i)/terrainwidth,f(j)/terrainheight);
-                            //glNormal3f(normals[i][j].x,normals[i][j].y,normals[i][j].z);
+                            glNormal3f(normals[i][j].x,normals[i][j].y,normals[i][j].z);
                             glVertex3f(i*SCALE,j*SCALE,data[(j)*terrainwidth*3+i*3+1]*SCALE*HEIGHTSCALE);
 
                             glTexCoord2f(f(i+1.0)/terrainwidth,f(j)/terrainheight);
-                            //glNormal3f(normals[i+1][j].x,normals[i+1][j].y,normals[i+1][j].z);
+                            glNormal3f(normals[i+1][j].x,normals[i+1][j].y,normals[i+1][j].z);
                             glVertex3f((i+1)*SCALE,j*SCALE,data[(j)*terrainwidth*3+(i+1)*3+1]*SCALE*HEIGHTSCALE);
 
-                            //glNormal3f(normals[i+1][j].x,normals[i+1][j].y,normals[i+1][j].z);
+                            glNormal3f(normals[i+1][j].x,normals[i+1][j].y,normals[i+1][j].z);
                             glTexCoord2f(f(i)/terrainwidth,f(j+1)/terrainheight);
                             glVertex3f(i*SCALE,(j+1)*SCALE,data[(j+1)*terrainwidth*3+i*3+1]*SCALE*HEIGHTSCALE);
 
-                            //glNormal3f(normals[i+1][j+1].x,normals[i+1][j+1].y,normals[i+1][j+1].z);
+                            glNormal3f(normals[i+1][j+1].x,normals[i+1][j+1].y,normals[i+1][j+1].z);
                             glTexCoord2f(f(i+1)/terrainwidth,f(j+1)/terrainheight);
                             glVertex3f((i+1)*SCALE,(j+1)*SCALE,data[(j+1)*terrainwidth*3+(i+1)*3+1]*SCALE*HEIGHTSCALE);
 
