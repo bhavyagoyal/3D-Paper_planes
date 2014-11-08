@@ -7,12 +7,12 @@
 using namespace std;
 
 
-terrain a("hm.bmp","tex.bmp"),b("ball.bmp","ball.bmp"),c("tex.bmp","wall.bmp");
+terrain a("hm.bmp","tex.bmp"),b("hm.bmp","tex.bmp"),c("hm.bmp","tex.bmp");
 int front=1;
 bool* keyStates = new bool[256];
 GLuint object1,terrain1,terrain2,terrain3;
 
-double x,t1,t2,t3,planey;
+double x,t1,t2,t3,planey,SCALE,HEIGHTSCALE;
 GLfloat aspect;
 void keyOperations (void) {
 if (keyStates[GLUT_KEY_F5]) {
@@ -71,18 +71,18 @@ glMatrixMode(GL_PROJECTION);
    	//c.Render();
    	glCallList(terrain3);
    	glPopMatrix();
-   if(front==1 && planey>(t1+(a.terrainwidth)*0.1/2)+20)
+   if(front==1 && planey>(t1+(a.terrainwidth)*0.1)+20)
    {
    	front=2;
    	t1+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*0.1;
 
    }
-   else if(front==2 && planey>(t2+(b.terrainwidth)*0.1/2)+20)
+   else if(front==2 && planey>(t2+(b.terrainwidth)*0.1)+20)
    {
    	front=3;
    	t2+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*0.1;
    }
-   else if(planey>(t3+(c.terrainwidth)*0.1/2)+20)
+   else if(planey>(t3+(c.terrainwidth)*0.1)+20)
    {
    	front=1;
    	t3+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*0.1;
@@ -142,8 +142,8 @@ void init()
    glEnable(GL_NORMALIZE);
    glEnable(GL_DEPTH_TEST);
    //a.textures="ball.bmp";
-   b.textures="wall.bmp";
-   c.textures="tex.bmp";
+   // b.textures="wall.bmp";
+   // c.textures="tex.bmp";
    
    Objectrender dirtbike("toru.obj","wall.bmp");
    cerr << "error crossed"<< endl;

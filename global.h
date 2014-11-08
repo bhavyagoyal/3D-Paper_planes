@@ -18,3 +18,4 @@ extern terrain a,b,c;
 extern int front;
 extern double planey;
 extern GLfloat aspect;
+extern double SCALE,HEIGHTSCALE;

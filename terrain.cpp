@@ -8,7 +8,7 @@
 #include "global.h"
 #include "first.h"
 
-  int SCALE=1,HEIGHTSCALE=1;
+ 
 typedef float f;
 float frustum[6][4];
 
@@ -215,8 +215,8 @@ void terrain :: Render1(Texture a)
   // glNormal3f(0,0,1);
   // glVertex3f(20,-20,0);
   // glEnd();
-  double SCALE=0.1;
-  double HEIGHTSCALE=0.1;
+  SCALE=0.1;
+  HEIGHTSCALE=0.1;
   for(int j=0;j+1<terrainwidth-1;j++)
       { int i=0;
 
