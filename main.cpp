@@ -24,6 +24,11 @@ if (keyStates[GLUT_KEY_F5]) {
 if(keyStates[GLUT_KEY_F4])
 {
 	planey+=10;
+	
+}
+if(keyStates[GLUT_KEY_F3])
+{
+
 }
 }
 
@@ -56,7 +61,7 @@ glMatrixMode(GL_PROJECTION);
 	 gluPerspective(60.0f, aspect, 0.05f, 1000.0f);
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
-    gluLookAt(0,-20+planey,10,0,planey,0,0,0,1);
+    gluLookAt(a.terrainheight*SCALE/2.0,-20+planey,10,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
     glPushMatrix();
     glTranslatef(0,t1,0);
    // a.Render();
@@ -90,7 +95,7 @@ glMatrixMode(GL_PROJECTION);
    cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
    cout << "planey "<<planey << endl;
    glPushMatrix();
-   glTranslatef(0,planey,0);
+   glTranslatef(a.terrainheight*SCALE/2.0,planey,10);
    glRotatef(x,1,0,0);
  
   glCallList(object1);
