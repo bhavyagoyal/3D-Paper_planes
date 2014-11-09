@@ -8,11 +8,11 @@ using namespace std;
 
 
 terrain a("hm.bmp","tex.bmp"),b("hm.bmp","tex.bmp"),c("hm.bmp","tex.bmp");
-int front=1;
+int front=1,viewx,viewy;
 bool* keyStates = new bool[256];
 GLuint object1,terrain1,terrain2,terrain3;
 
-double x,t1,t2,t3,planey,SCALE,HEIGHTSCALE;
+double x,t1,t2,t3,planex,planez,planey,SCALE,HEIGHTSCALE;
 GLfloat aspect;
 void keyOperations (void) {
 if (keyStates[GLUT_KEY_F5]) {
@@ -34,6 +34,22 @@ if(keyStates[GLUT_KEY_F3])
 
 void keyPressed (int key, int x, int y) {
 keyStates[key] = true;
+cout << "x " << x << " y "<< y << endl;
+planex+=(x-viewx/2)*2.0/viewx;
+planez-=(y-viewy/2)*2.0/viewy;
+cout << planex << " px "<< planez << " pz "<< endl;
+if(planex<0)
+{
+  planex=0;
+}
+else if(planex > a.terrainwidth*SCALE)
+{
+  planex=a.terrainwidth*SCALE;
+}
+if(planez<0)
+  planez=0;
+else if(planez>20)
+  planez=20;
 }
 
 void keyUp (int key, int x, int y) {
@@ -95,7 +111,8 @@ glMatrixMode(GL_PROJECTION);
    cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
    cout << "planey "<<planey << endl;
    glPushMatrix();
-   glTranslatef(a.terrainheight*SCALE/2.0,planey,10);
+   cout << planex << " px "<< planez << " pz "<< endl;
+   glTranslatef(planex,planey,planez);
    glRotatef(x,1,0,0);
  
   glCallList(object1);
@@ -156,6 +173,8 @@ void init()
    b.Read();
    c.Read();
    x=0;t1=0;t2=(a.terrainwidth)*0.1;t3=t2+(b.terrainwidth)*0.1;planey=0;
+   planex=a.terrainwidth*SCALE/2.0;
+   planez=10.0;
    object1 = glGenLists(1);
    glNewList(object1, GL_COMPILE);
    dirtbike.Render();
@@ -190,6 +209,8 @@ void reshape (int w, int h)
 {
    if (h == 0) h = 1;                // To prevent divide by 0
    aspect = (GLfloat)w / (GLfloat)h;
+   viewx=w;
+   viewy=h;
    glViewport (0, 0, (GLsizei) w, (GLsizei) h);
    glMatrixMode (GL_PROJECTION);
    glLoadIdentity();

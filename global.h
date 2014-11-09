@@ -16,6 +16,6 @@
 #include "terrain.h"
 extern terrain a,b,c;
 extern int front;
-extern double planey;
+extern double planex,planez,planey;
 extern GLfloat aspect;
 extern double SCALE,HEIGHTSCALE;
