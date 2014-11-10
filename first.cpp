@@ -43,8 +43,8 @@ GLuint Texture ::  LoadImage()
 		glBindTexture(GL_TEXTURE_2D, g);
 		for(int i=0;i<terrainwidth*terrainheight*3;i+=3){
 			GLubyte temp;
-			temp=data[i+1];
-			data[i+1]=data[i];
+			temp=data[i+2];
+			data[i+2]=data[i];
 			data[i]=temp;
 		}
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, terrainwidth, terrainheight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
