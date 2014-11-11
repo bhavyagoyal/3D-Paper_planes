@@ -7,10 +7,10 @@
 using namespace std;
 
 
-terrain a("hm.bmp","tex.bmp"),b("hm.bmp","tex.bmp"),c("hm.bmp","tex.bmp");
+terrain a("hm1.bmp","tex.bmp"),b("hm1.bmp","tex.bmp"),c("hm1.bmp","tex.bmp");
 int front=1,viewx,viewy;
 bool* keyStates = new bool[256];
-GLuint object1,terrain1,terrain2,terrain3;
+GLuint object1,object2,terrain1,terrain2,terrain3;
 
 double x,t1,t2,t3,planex,planez,planey,SCALE,HEIGHTSCALE;
 GLfloat aspect;
@@ -82,40 +82,61 @@ glMatrixMode(GL_PROJECTION);
     glTranslatef(0,t1,0);
    // a.Render();
     glCallList(terrain1);
+    glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,5);
+    glRotatef(90,1,0,0);
+  	glScalef(5,5,5);
+  	glCallList(object2);
+   // glTranslatef(0,a.terrainwidth*SCALE/2.0,0);
+   // glScalef(10,10,10);
+
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0,t2,0);
-   glCallList(terrain2);
+    glCallList(terrain2);
+    glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,5);
+    glRotatef(90,1,0,0);
+  	glScalef(5,5,5);
+  	glCallList(object2);
+
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0,t3,0);
    	//c.Render();
    	glCallList(terrain3);
+   	glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,5);
+    glRotatef(90,1,0,0);
+  	glScalef(5,5,5);
+  	glCallList(object2);
    	glPopMatrix();
-   if(front==1 && planey>(t1+(a.terrainwidth)*0.1)+20)
+
+
+   if(front==1 && planey>(t1+(a.terrainwidth)*SCALE)+10)
    {
    	front=2;
-   	t1+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*0.1;
+   	t1+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
 
    }
-   else if(front==2 && planey>(t2+(b.terrainwidth)*0.1)+20)
+   else if(front==2 && planey>(t2+(b.terrainwidth)*SCALE)+10)
    {
    	front=3;
-   	t2+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*0.1;
+   	t2+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
    }
-   else if(planey>(t3+(c.terrainwidth)*0.1)+20)
+   else if(front==3 && planey>(t3+(c.terrainwidth)*SCALE+10))
    {
    	front=1;
-   	t3+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*0.1;
+   	t3+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
    }
    cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
    cout << "planey "<<planey << endl;
    glPushMatrix();
    cout << planex << " px "<< planez << " pz "<< endl;
+   glPushMatrix();
    glTranslatef(planex,planey,planez);
    glRotatef(x,1,0,0);
  
-  glCallList(object1);
+   glCallList(object1);
+   glPopMatrix();
+
  //   glMatrixMode(GL_PROJECTION);
 	// glLoadIdentity();
 	//  glOrtho(-100,100,-100,100,-100,100);
@@ -168,16 +189,21 @@ void init()
    // c.textures="tex.bmp";
    
    Objectrender dirtbike("toru.obj","wall.bmp");
+   Objectrender house("House.obj","wall.bmp");
    cerr << "error crossed"<< endl;
    a.Read();
    b.Read();
    c.Read();
-   x=0;t1=0;t2=(a.terrainwidth)*0.1;t3=t2+(b.terrainwidth)*0.1;planey=0;
+   x=0;t1=0;t2=(a.terrainwidth)*SCALE;t3=t2+(b.terrainwidth)*SCALE;planey=0;
    planex=a.terrainwidth*SCALE/2.0;
    planez=10.0;
    object1 = glGenLists(1);
    glNewList(object1, GL_COMPILE);
    dirtbike.Render();
+   glEndList();
+   object2=glGenLists(10);
+   glNewList(object2,GL_COMPILE);
+   house.Render();
    glEndList();
    terrain1 = glGenLists(12);
    glNewList(terrain1, GL_COMPILE);
