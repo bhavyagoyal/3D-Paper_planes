@@ -56,6 +56,22 @@ else if(planez>20)
 void keyUp (int key, int x, int y) {
 keyStates[key] = false;
 }
+
+
+
+
+void mod1()
+{
+
+}
+
+
+
+
+
+
+
+
 /*********************************DISPLAY*********************************/
 
 void display(void)
@@ -63,116 +79,75 @@ void display(void)
    
 
 
-   keyOperations();
-   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   
-// 	glMatrixMode(GL_PROJECTION);
-// 	glLoadIdentity();
-// 	 glOrtho(-100,100,-100,100,-100,100);
-// 	// glPopMatrix();
-// 	 glMatrixMode(GL_MODELVIEW);
-//    glLoadIdentity();
-// a.Render();
-glMatrixMode(GL_PROJECTION);
-	 glLoadIdentity();
-	 gluPerspective(60.0f, aspect, 0.05f, 1000.0f);
-   glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();
+   	keyOperations();
+   	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(60.0f, aspect, 0.05f, 1000.0f);
+   	glMatrixMode(GL_MODELVIEW);
+   	glLoadIdentity();
     gluLookAt(a.terrainheight*SCALE/2.0,-20+planey,10,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
+   
+
     glPushMatrix();
     glTranslatef(0,t1,0);
-   // a.Render();
     glCallList(terrain1);
+   
     glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,5);
     glRotatef(90,1,0,0);
-  	glScalef(5,5,5);
+  	glScalef(25,25,25);
   	glCallList(object2);
-   // glTranslatef(0,a.terrainwidth*SCALE/2.0,0);
-   // glScalef(10,10,10);
-
     glPopMatrix();
+   
     glPushMatrix();
     glTranslatef(0,t2,0);
     glCallList(terrain2);
+    
     glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,5);
     glRotatef(90,1,0,0);
-  	glScalef(5,5,5);
+  	glScalef(25,25,25);
   	glCallList(object2);
-
     glPopMatrix();
+    
     glPushMatrix();
     glTranslatef(0,t3,0);
-   	//c.Render();
    	glCallList(terrain3);
+   	
    	glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,5);
     glRotatef(90,1,0,0);
-  	glScalef(5,5,5);
+  	glScalef(25,25,25);
   	glCallList(object2);
    	glPopMatrix();
 
 
-   if(front==1 && planey>(t1+(a.terrainwidth)*SCALE)+10)
-   {
-   	front=2;
-   	t1+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
-
-   }
-   else if(front==2 && planey>(t2+(b.terrainwidth)*SCALE)+10)
-   {
-   	front=3;
-   	t2+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
-   }
-   else if(front==3 && planey>(t3+(c.terrainwidth)*SCALE+10))
-   {
-   	front=1;
-   	t3+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
-   }
-   cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
-   cout << "planey "<<planey << endl;
-   glPushMatrix();
-   cout << planex << " px "<< planez << " pz "<< endl;
-   glPushMatrix();
-   glTranslatef(planex,planey,planez);
-   // glRotatef(90,0,1,0);
-   // glRotatef(-90,0,0,1);
-   // glRotatef(90,1,0,0);
-   // glScalef(3,3,3);
-   // glRotatef(90,1,0,0);
-   glRotatef(90,1,0,0);
-   glRotatef(theta,1,0,0);
-   glRotatef(phi,0,1,0);
-   glCallList(object1);
-   glPopMatrix();
-
- //   glMatrixMode(GL_PROJECTION);
-	// glLoadIdentity();
-	//  glOrtho(-100,100,-100,100,-100,100);
-	// // glPopMatrix();
-	//  glMatrixMode(GL_MODELVIEW);
- //   glLoadIdentity();
-  	glPopMatrix(); 
-  glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, a.ad.Terrainid);
-	// int w=(ad).terrainwidth;
-	// int h=(ad).terrainheight;
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-//HUD Code here***************************************************************************************************
-  // glBegin(GL_QUADS);
-  // glTexCoord2f(0,0);
-  // glNormal3f(0,0,1);
-  // glVertex3f(-200,1000,-200);
-  // glTexCoord2f(0,1);
-  // glNormal3f(0,0,1);
-  // glVertex3f(-200,1000,200);
-  // glTexCoord2f(1,1);
-  // glNormal3f(0,0,1);
-  // glVertex3f(200,1000,200);
-  // glTexCoord2f(1,0);
-  // glNormal3f(0,0,1);
-  // glVertex3f(200,1000,-200);
-  // glEnd();
-
-   //dirtbike.Render();
+	if(front==1 && planey>(t1+(a.terrainwidth)*SCALE)+10)
+	{
+		front=2;
+		t1+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
+	}
+	else if(front==2 && planey>(t2+(b.terrainwidth)*SCALE)+10)
+	{
+		front=3;
+		t2+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
+	}
+	else if(front==3 && planey>(t3+(c.terrainwidth)*SCALE+10))
+	{
+		front=1;
+		t3+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
+	}
+	cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
+	cout << "planey "<<planey << endl;
+	
+	cout << planex << " px "<< planez << " pz "<< endl;
+	glPushMatrix();
+	glTranslatef(planex,planey,planez);
+    glRotatef(90,1,0,0);
+   	glRotatef(theta,1,0,0);
+   	glRotatef(phi,0,1,0);
+   	glCallList(object1);
+   	glPopMatrix();
+	
+	
    glFlush ();
    glutSwapBuffers();
 }
