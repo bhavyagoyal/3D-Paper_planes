@@ -72,8 +72,8 @@ GLuint Objectrender :: LoadBMP(char* pic)
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
        for(int i=0;i+2<terrainwidth*terrainheight*3;i+=3)
         {	GLubyte temp;
-            temp=data[i+2];
-            data[i+2]=data[i];
+            temp=data[i+1];
+            data[i+1]=data[i];
             data[i]=temp;
 
         }

@@ -11,7 +11,7 @@ terrain a("hm1.bmp","tex.bmp"),b("hm1.bmp","tex.bmp"),c("hm1.bmp","tex.bmp");
 int front=1,viewx,viewy;
 bool* keyStates = new bool[256];
 GLuint object1,object2,terrain1,terrain2,terrain3;
-
+double theta,phi;
 double x,t1,t2,t3,planex,planez,planey,SCALE,HEIGHTSCALE;
 GLfloat aspect;
 void keyOperations (void) {
@@ -21,10 +21,9 @@ if (keyStates[GLUT_KEY_F5]) {
     x-=360;
 
 }
-if(keyStates[GLUT_KEY_F4])
+if(keyStates[GLUT_KEY_F6])
 {
 	planey+=10;
-	
 }
 if(keyStates[GLUT_KEY_F3])
 {
@@ -37,6 +36,8 @@ keyStates[key] = true;
 cout << "x " << x << " y "<< y << endl;
 planex+=(x-viewx/2)*2.0/viewx;
 planez-=(y-viewy/2)*2.0/viewy;
+theta = -(y-viewy/2)*90/viewy;
+phi = -(x-viewx/2)*120/viewx;
 cout << planex << " px "<< planez << " pz "<< endl;
 if(planex<0)
 {
@@ -132,8 +133,14 @@ glMatrixMode(GL_PROJECTION);
    cout << planex << " px "<< planez << " pz "<< endl;
    glPushMatrix();
    glTranslatef(planex,planey,planez);
-   glRotatef(x,1,0,0);
- 
+   // glRotatef(90,0,1,0);
+   // glRotatef(-90,0,0,1);
+   // glRotatef(90,1,0,0);
+   // glScalef(3,3,3);
+   // glRotatef(90,1,0,0);
+   glRotatef(90,1,0,0);
+   glRotatef(theta,1,0,0);
+   glRotatef(phi,0,1,0);
    glCallList(object1);
    glPopMatrix();
 
@@ -188,7 +195,7 @@ void init()
    // b.textures="wall.bmp";
    // c.textures="tex.bmp";
    
-   Objectrender dirtbike("toru.obj","wall.bmp");
+   Objectrender dirtbike("plane-fd.obj","wall.bmp");
    Objectrender house("House.obj","wall.bmp");
    cerr << "error crossed"<< endl;
    a.Read();
@@ -199,6 +206,7 @@ void init()
    planez=10.0;
    object1 = glGenLists(1);
    glNewList(object1, GL_COMPILE);
+   glScalef(3,3,3);
    dirtbike.Render();
    glEndList();
    object2=glGenLists(10);
@@ -220,7 +228,8 @@ void init()
    
    GLfloat mat_specular[] = { 1, 1,1, 1};
 
-
+   theta =0;
+   phi=0;
  GLfloat light_position[] = { 100, 100, 100.0, 1.0 };
  glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_specular);
   // glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_shininess);
