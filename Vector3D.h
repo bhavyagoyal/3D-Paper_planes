@@ -1,20 +1,9 @@
-/*
- * Vector3D.h
- *
- *  Created on: Aug 5, 2013
- *      Author: cs1120224
- */
 
 #ifndef VECTOR3D_H_
 #define VECTOR3D_H_
 #include<iostream>
 using namespace std;
-/*
- * Vector3D.h
- *
- *  Created on: Aug 5, 2013
- *      Author: cs1120224
- */
+
 //! Vector Class
  /*!
     This class implements Vectors in 3D and all the function associated with vectors in 3D

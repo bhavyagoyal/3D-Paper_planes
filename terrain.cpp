@@ -7,7 +7,7 @@
 #include "terrain.h"
 #include "global.h"
 #include "first.h"
-#include "Vector3D.h"
+#include "vec3f.h"
 
  
 typedef float f;
@@ -160,9 +160,9 @@ GLuint terr;																			//!< Stores the display list id of the terrain
 */
 
 
-Vector3D retvec(int i,int j,GLubyte* data,int terrainwidth)
+Vec3f retvec(int i,int j,GLubyte* data,int terrainwidth)
 {
-  return Vector3D(i*SCALE,j*SCALE,data[(j)*terrainwidth*3+i*3+1]*SCALE*HEIGHTSCALE);
+  return Vec3f(i*SCALE,j*SCALE,data[(j)*terrainwidth*3+i*3+1]*SCALE*HEIGHTSCALE);
 }
 void terrain :: Read(void){
       SCALE=0.5;
@@ -185,7 +185,7 @@ void terrain :: Read(void){
       data = (GLubyte*)malloc(terrainwidth * terrainheight * 3);
       fread(data,1, terrainwidth * terrainheight*3, picfile);
       fclose(picfile);
-      Vector3D q,w,e,r;
+      Vec3f q,w,e,r;
       normals[0]=new normal[terrainheight];
       normals[terrainwidth-1]=new normal[terrainheight];
       for(int i=1;i<terrainwidth-1;i++)
@@ -193,21 +193,21 @@ void terrain :: Read(void){
         normals[i]=new normal[terrainheight];
         for(int j=1;j<terrainheight-1;j++)
         {
-            q=q.cross(retvec(i,j,data,terrainwidth)-retvec(i+1,j,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i,j+1,data,terrainwidth));
-            w=q.cross(retvec(i,j,data,terrainwidth)-retvec(i,j+1,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i-1,j,data,terrainwidth));
-            e=q.cross(retvec(i,j,data,terrainwidth)-retvec(i-1,j,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i,j-1,data,terrainwidth));
-            r=q.cross(retvec(i,j,data,terrainwidth)-retvec(i,j-1,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i+1,j,data,terrainwidth));
-            if(q.z<0)
+            q=q.cross_ter(retvec(i,j,data,terrainwidth)-retvec(i+1,j,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i,j+1,data,terrainwidth));
+            w=q.cross_ter(retvec(i,j,data,terrainwidth)-retvec(i,j+1,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i-1,j,data,terrainwidth));
+            e=q.cross_ter(retvec(i,j,data,terrainwidth)-retvec(i-1,j,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i,j-1,data,terrainwidth));
+            r=q.cross_ter(retvec(i,j,data,terrainwidth)-retvec(i,j-1,data,terrainwidth),retvec(i,j,data,terrainwidth)-retvec(i+1,j,data,terrainwidth));
+            if(q.v[2]<0)
               q-=q;
-            if(w.z<0)
+            if(w.v[2]<0)
               w-=w;
-            if(e.z<0)
+            if(e.v[2]<0)
               e-=e;
-            if(r.z<0)
+            if(r.v[2]<0)
               r-=r;
-            normals[i][j].x=(q.x+w.x+e.x+r.x)/4.0;
-            normals[i][j].y=(q.y+w.y+e.y+r.y)/4.0;
-            normals[i][j].z=(q.z+w.z+e.z+r.z)/4.0;
+            normals[i][j].x=(q.v[0]+w.v[0]+e.v[0]+r.v[0])/4.0;
+            normals[i][j].y=(q.v[1]+w.v[1]+e.v[1]+r.v[1])/4.0;
+            normals[i][j].z=(q.v[2]+w.v[2]+e.v[2]+r.v[2])/4.0;
 
         }
       }
