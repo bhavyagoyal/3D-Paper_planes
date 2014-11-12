@@ -34,12 +34,12 @@ if(keyStates[GLUT_KEY_F3])
 
 void keyPressed (int key, int x, int y) {
 keyStates[key] = true;
-cout << "x " << x << " y "<< y << endl;
+//cout << "x " << x << " y "<< y << endl;
 planex+=(x-viewx/2)*2.0/viewx;
 planez-=(y-viewy/2)*2.0/viewy;
 theta = -(y-viewy/2)*90/viewy;
 phi = -(x-viewx/2)*120/viewx;
-cout << planex << " px "<< planez << " pz "<< endl;
+//cout << planex << " px "<< planez << " pz "<< endl;
 if(planex<0)
 {
   planex=0;
@@ -66,8 +66,21 @@ void housef()
 	glPushMatrix();
 	glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,10);
    glRotatef(90,1,0,0);
-  	glScalef(10,10,10);
+  	glScalef(5,10,10);
+    // glutSolidSphere(2,20,20);
   	glCallList(house);
+    glPopMatrix();
+}
+
+
+
+void planef()
+{
+  glPushMatrix();
+
+    // glutSolidSphere(2,20,20);
+    glScalef(2,2,2);
+    glCallList(plane);
     glPopMatrix();
 }
 
@@ -93,11 +106,44 @@ void cubef()
 }
 
 
+bool check(){
+  cout << planex << " px "<< planey<<"py"<<planez << " pz "<< endl;
+  if(front==1){
+    if(t1obj==0){
+      cout<<t1+a.terrainwidth*SCALE/2.0<<endl;
+      if( abs(planex-(a.terrainheight*SCALE/2.0))<3 && abs(planez)<17.5 && abs(planey-(t1+a.terrainwidth*SCALE/2.0))<15) {
+        return true;
+      }
+    }
+  }
+  else if(front==2){
+    if(t2obj==0){
+      // cout<<t2+a.terrainwidth*SCALE/2.0<<endl;
+      if( abs(planex-(a.terrainheight*SCALE/2.0))<3 && abs(planez)<17.5 && abs(planey-(t2+a.terrainwidth*SCALE/2.0))<15) {
+        return true;
+      }
+    }
+  }
+  else{
+    if(t3obj==0){
+      // cout<<t3+a.terrainwidth*SCALE/2.0<<endl;
+      if( abs(planex-(a.terrainheight*SCALE/2.0))<3 && abs(planez)<17.5 && abs(planey-(t3+a.terrainwidth*SCALE/2.0))<15) {
+        return true;
+      }
+    }
+  }
+
+return false;
+
+}
+
 
 /*********************************DISPLAY*********************************/
 
 void display(void)
 {
+
+  cout<<a.terrainheight*SCALE/2.0<<" "<<a.terrainwidth*SCALE/2.0<<endl;
    random_device rd;
    mt19937 gen(rd());
    uniform_int_distribution<> dis(0, 2);
@@ -106,11 +152,11 @@ void display(void)
    	keyOperations();
    	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60.0f, aspect, 0.05f, 1000.0f);
+	  glLoadIdentity();
+	  gluPerspective(60.0f, aspect, 0.05f, 1000.0f);
    	glMatrixMode(GL_MODELVIEW);
    	glLoadIdentity();
-    gluLookAt(a.terrainheight*SCALE/2.0,-20+planey,10,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
+    gluLookAt(a.terrainheight*SCALE/2.0,-20+planey,15,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
    
 
     glPushMatrix();
@@ -136,12 +182,12 @@ void display(void)
    	else
    		cubef();
    	glPopMatrix();
-    
+
     glPushMatrix();
     glTranslatef(0,t3,0);
    	glCallList(terrain3);
    	
-   	 if(t3obj==0)
+   	if(t3obj==0)
    		housef();
    	else if(t3obj==1)
    		treef();
@@ -167,19 +213,24 @@ void display(void)
 		t3+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
 		t3obj=dis(gen);
 	}
-	cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
-	cout << "planey "<<planey << endl;
+	// cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
+	// cout << "planey "<<planey << endl;
 	/***********************************************************PHYSICS *******************************************************/
-	cout << planex << " px "<< planez << " pz "<< endl;
+	// cout << planex << " px "<< planez << " pz "<< endl;
 	glPushMatrix();
 	glTranslatef(planex,planey,planez);
     glRotatef(90,1,0,0);
    	glRotatef(theta,1,0,0);
    	glRotatef(phi,0,1,0);
-   	glScalef(3,3,3);
-   	glCallList(plane);
+    // glutSolidSphere(0.3f,10,10);
+   planef();
    	glPopMatrix();
-	
+
+    glutSolidSphere(20,20,20);
+    if(check()){
+      cout<<"hit"<<endl;
+    }
+
 
    glFlush ();
    glutSwapBuffers();
