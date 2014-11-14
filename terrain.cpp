@@ -271,10 +271,10 @@ void terrain :: Render1(Texture a)
   // glVertex3f(20,-20,0);
   // glEnd();
 
-  for(int j=0;j+1<terrainwidth-1;j++)
+  for(int j=0;j<terrainwidth-1;j++)
       { int i=0;
 
-        while(i+1<terrainheight-1)
+        while(i<terrainheight-1)
         {
               
 
@@ -302,6 +302,41 @@ void terrain :: Render1(Texture a)
               
         }
       }
+
+
+int j=terrainwidth-1;
+       int i=0;
+
+        while(i<terrainheight-1)
+        {
+              
+
+            //if(PointInFrustum(i*SCALE,getHeight(i,j),j*SCALE)){
+                
+              glBegin(GL_TRIANGLE_STRIP);
+                            glTexCoord2f(f(i)/terrainwidth,f(j)/terrainheight);
+                            glNormal3f(normals[i][j-1].x,normals[i][j-1].y,normals[i][j-1].z);
+                            glVertex3f(i*SCALE,j*SCALE,data[(j-1)*terrainwidth*3+i*3+1]*SCALE*HEIGHTSCALE);
+
+                            glTexCoord2f(f(i+1.0)/terrainwidth,f(j)/terrainheight);
+                            glNormal3f(normals[i+1][j-1].x,normals[i+1][j-1].y,normals[i+1][j-1].z);
+                            glVertex3f((i+1)*SCALE,j*SCALE,data[(j)*terrainwidth*3+(i+1)*3+1]*SCALE*HEIGHTSCALE);
+
+                            glNormal3f(normals[i+1][j-1].x,normals[i+1][j-1].y,normals[i+1][j-1].z);
+                            glTexCoord2f(f(i)/terrainwidth,f(j+1)/terrainheight);
+                            glVertex3f(i*SCALE,(j+1)*SCALE,data[(j)*terrainwidth*3+i*3+1]*SCALE*HEIGHTSCALE);
+
+                            glNormal3f(normals[i+1][j].x,normals[i+1][j].y,normals[i+1][j].z);
+                            glTexCoord2f(f(i+1)/terrainwidth,f(j+1)/terrainheight);
+                            glVertex3f((i+1)*SCALE,(j+1)*SCALE,data[(j)*terrainwidth*3+(i+1)*3+1]*SCALE*HEIGHTSCALE);
+
+                     glEnd();//}
+                            i++;
+              
+        
+      }
+
+
 
 
 //

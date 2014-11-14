@@ -113,10 +113,10 @@ void cubef()
 
 
 bool check(){
-  cout << planex << " px "<< planey<<"py"<<planez << " pz "<< endl;
+  //cout << planex << " px "<< planey<<"py"<<planez << " pz "<< endl;
   if(front==1){
     if(t1obj==0){
-      cout<<t1+a.terrainwidth*SCALE/2.0<<endl;
+      //cout<<t1+a.terrainwidth*SCALE/2.0<<endl;
       if( abs(planex-(a.terrainheight*SCALE/2.0))<3 && abs(planez)<17.5 && abs(planey-(t1+a.terrainwidth*SCALE/2.0))<15) {
         return true;
       }
@@ -149,7 +149,7 @@ return false;
 void display(void)
 {
 
-  cout<<a.terrainheight*SCALE/2.0<<" "<<a.terrainwidth*SCALE/2.0<<endl;
+  // cout<<a.terrainheight*SCALE/2.0<<" "<<a.terrainwidth*SCALE/2.0<<endl;
    random_device rd;
    mt19937 gen(rd());
    uniform_int_distribution<> dis(0, 2);
@@ -225,7 +225,8 @@ void display(void)
 		t3+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
 		t3obj=dis(gen);
 	}
-	// cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
+	cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
+  cout<<a.terrainheight*SCALE<<endl;
 	// cout << "planey "<<planey << endl;
 	/***********************************************************PHYSICS *******************************************************/
 	// cout << planex << " px "<< planez << " pz "<< endl;
