@@ -33,6 +33,7 @@ public:
 
 	*/
 	GLuint LoadImage();
+	GLuint LoadImageFoun(char *);
 
 	Texture(const char * d);
 	Texture(void);

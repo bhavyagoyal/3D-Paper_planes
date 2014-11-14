@@ -2,19 +2,25 @@
 #include "obj1.h"
 #include "global.h"
 #include "terrain.h"
+#include "particle.cpp"
 #define refreshMills 10
 
 using namespace std;
 
 
-terrain a("hm1.bmp","tex.bmp"),b("hm1.bmp","tex.bmp"),c("hm1.bmp","tex.bmp");
+terrain a("hm1.bmp","tex.bmp"),b("hm1.bmp","tex.bmp"),c("hm1.bmp","tex.bmp"),foun("Palm.bmp","Palm.bmp");
 int front=1,viewx,viewy;
 bool* keyStates = new bool[256];
 GLuint plane,house,tree,terrain1,terrain2,terrain3,cube;
 double theta,phi;
 double x,t1,t2,t3,planex,planez,planey,SCALE,HEIGHTSCALE;
 int t1obj,t2obj,t3obj;
-GLfloat aspect;
+ParticleEngine* _particleEngine;GLfloat aspect;
+
+
+
+
+
 void keyOperations (void) {
 if (keyStates[GLUT_KEY_F5]) {
   x+=10;
@@ -110,14 +116,20 @@ void display(void)
 	gluPerspective(60.0f, aspect, 0.05f, 1000.0f);
    	glMatrixMode(GL_MODELVIEW);
    	glLoadIdentity();
-    gluLookAt(a.terrainheight*SCALE/2.0,-20+planey,10,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
+    gluLookAt(a.terrainheight*SCALE/2.0,-20+planey,15,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
    
 
     glPushMatrix();
     glTranslatef(0,t1,0);
     glCallList(terrain1);
     if(t1obj==0)
-   		housef();
+   		{
+      //housef();
+        glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,4);
+        glScalef(20.0f, 20.0f, 20.0f);
+        glRotatef(90,1,0,0);
+        _particleEngine->draw();
+      }
    	else if(t1obj==1)
    		treef();
    	else
@@ -194,11 +206,14 @@ void init()
 
    for(int i=0;i<256;i++)
    	keyStates[i]=false;
-   glClearColor (0.4, 0.4,1.0, 1.0);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_COLOR_MATERIAL);
+  glEnable(GL_BLEND);
    glShadeModel (GL_SMOOTH);
    glEnable(GL_LIGHTING);
    glEnable(GL_NORMALIZE);
-   glEnable(GL_DEPTH_TEST);
+    glClearColor (0.4, 0.4,1.0, 1.0);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    Objectrender dirtbike("plane-fd.obj","wall.bmp");
    Objectrender hous("House.obj","wall.bmp");
    Objectrender tre("Palm.obj","Palm.bmp");
@@ -207,6 +222,10 @@ void init()
    a.Read();
    b.Read();
    c.Read();
+   foun.LoadFountain();
+
+   _particleEngine=new ParticleEngine(foun.ad.Terrainid);
+   
    x=0;t1=0;t2=(a.terrainwidth)*SCALE;t3=t2+(b.terrainwidth)*SCALE;planey=0;
    planex=a.terrainwidth*SCALE/2.0;
    planez=10.0;
@@ -275,6 +294,7 @@ void reshape (int w, int h)
 }
 
 void timer(int value) {
+   _particleEngine->advance(TIMER_MS / 1000.0f);
    glutPostRedisplay();      // Post re-paint request to activate display()
    glutTimerFunc(refreshMills, timer, 0); // next timer call milliseconds later
 }
