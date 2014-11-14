@@ -76,7 +76,7 @@ void housef()
   	glScalef(5,10,10);
 glCallList(house);
 glPopMatrix();
-     glutSolidSphere(5.25,20,20);
+     //glutSolidSphere(5.25,20,20);
   	
     glPopMatrix();
 }
@@ -97,9 +97,13 @@ void treef()
 {
 	glPushMatrix();
 	glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,10);
-   //glRotatef(90,-1,0,0);
+  glPushMatrix();
+   glRotatef(90,1,0,0);
   glScalef(5,5,5);
   	glCallList(tree);
+    glPopMatrix();
+    glTranslatef(0,0,1);  
+    glutSolidSphere(3.5,20,20);
     glPopMatrix();
 }
 
@@ -139,6 +143,11 @@ bool check(){
           return true;
 
       }
+    }
+
+    else if(t1obj==1)
+    {
+
     }
   }
   else if(front==2){
@@ -313,8 +322,9 @@ void init()
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    Objectrender dirtbike("plane-fd.obj","wall.bmp");
    Objectrender hous("House.obj","wall.bmp");
-   Objectrender tre("Palm.obj","Palm.bmp");
+   Objectrender tre("Tree.obj","Tree.bmp");
    Objectrender cub("cube.obj","cube.bmp");
+   Objectrender star("star.obj","cube.bmp");
    cerr << "error crossed"<< endl;
    a.Read();
    b.Read();
@@ -329,7 +339,7 @@ void init()
    
    plane = glGenLists(1);
    glNewList(plane, GL_COMPILE);
-   dirtbike.Render();
+   star.Render();
    glEndList();
    
    house=glGenLists(10);
