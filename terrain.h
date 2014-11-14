@@ -64,6 +64,7 @@ public:
 
 		*/
 	void Read(void);
+	void LoadFountain(void);
 	//! this function loads the texture image and returns the texture object
 
 	//! This is the constructor of the terrain class

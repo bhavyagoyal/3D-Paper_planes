@@ -227,6 +227,14 @@ void terrain :: Read(void){
           return;
 
 }
+
+void terrain :: LoadFountain()
+{
+  Texture a(textures);
+  a.Terrainid=a.LoadImageFoun(heightmap);
+  ad=a;
+}
+
 void terrain :: Render(){
 
    return Render1(ad);
