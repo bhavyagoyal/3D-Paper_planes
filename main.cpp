@@ -419,7 +419,7 @@ void display(void)
       else
         tress.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
     }
-    else if(y%3==1 && t1obj!=0)
+    else if(y%3==1)
      {
 
       if(z%4==0)
@@ -431,7 +431,18 @@ void display(void)
       else
         toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
     
-     } 
+     }
+     else
+     {
+        if(z%4==0)
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+      else if(z%4==1)
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+      else if(z%4==2)
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+      else
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+     }  
    
   }
   else if(front==2 && planey>(t2+(b.terrainwidth)*SCALE)+10)
@@ -440,8 +451,42 @@ void display(void)
     t2+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
     t2obj=dis(gen);t2obj%=2;
     int y=dis(gen);
+    int z=dis(gen);
+    if(y%3==0)
+    {
+      if(z%4==0)
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+      else if(z%4==1)
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+      else if(z%4==2)
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+      else
+        tress.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+    }
+    else if(y%3==1)
+     {
+
+      if(z%4==0)
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+      else if(z%4==1)
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+      else if(z%4==2)
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+      else
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
     
-      trees.push_back(make_pair(a.terrainwidth*SCALE/2.0+6,t2+a.terrainheight*SCALE/2.0+15));
+     }
+     else
+     {
+        if(z%4==0)
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+      else if(z%4==1)
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+      else if(z%4==2)
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+      else
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+     }
     
   }
   else if(front==3 && planey>(t3+(c.terrainwidth)*SCALE+10))
@@ -450,7 +495,42 @@ void display(void)
     t3+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
     t3obj=dis(gen);t3obj%=2;
     int y=dis(gen);
-    trees.push_back(make_pair(a.terrainwidth*SCALE/2.0+6,t3+a.terrainheight*SCALE/2.0+15));
+    int z=dis(gen);
+    if(y%3==0)
+    {
+      if(z%4==0)
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+      else if(z%4==1)
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+      else if(z%4==2)
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+      else
+        tress.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+    }
+    else if(y%3==1)
+     {
+
+      if(z%4==0)
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+      else if(z%4==1)
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+      else if(z%4==2)
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+      else
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+    
+     }
+     else
+     {
+        if(z%4==0)
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+      else if(z%4==1)
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+      else if(z%4==2)
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+      else
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+     }
     
   }
 	// cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
