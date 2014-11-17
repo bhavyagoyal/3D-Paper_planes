@@ -16,7 +16,7 @@ double theta,phi,starang=0;;
 double x,t1,t2,t3,planex,planez,planey,SCALE,HEIGHTSCALE;
 int t1obj=1,t2obj=1,t3obj=1;
 ParticleEngine* _particleEngine;GLfloat aspect;
-bool pauseflag=false;
+bool pauseflag=false,start1=false,start2=false;
 int score =0;
 vector<pair<double,double>> trees = {};
 vector<pair<double,double>> toruss = {};
@@ -32,7 +32,7 @@ void keyOperations (void) {
     }
     if(keyStates[GLUT_KEY_F6])
     {
-        planey+=100*refreshMills/1000.0;
+       planey+=100*refreshMills/1000.0+min((planey)*200*refreshMills/(1000.0*1000.0),200*refreshMills/1000.0);
     }
 }
 
@@ -289,7 +289,16 @@ bool check2(){
   return false;
 }
 
-
+void HUD(const int x, const int y,const int z)
+{
+  glColor3f(222.0/255.0,255.0/255.0,204.0/255.0);
+  glBegin(GL_POLYGON);
+    glVertex3f(x-1,y+1,z);
+    glVertex3f(x+4,y+1,z);
+    glVertex3f(x+4,y-0.9,z);
+    glVertex3f(x-1,y-0.9,z);
+  glEnd();
+}
 
 
 /*********************************DISPLAY*********************************/
@@ -297,21 +306,43 @@ bool check2(){
 void display(void)
 {
 
+  if(!start1)
+  {
+        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+         glMatrixMode(GL_PROJECTION);
+         glLoadIdentity();
+         glOrtho(-10,10,-10,10,-10,10);
+         glMatrixMode(GL_MODELVIEW);
+         glLoadIdentity();
+
+
+         glEnable(GL_TEXTURE_2D);
+          glBindTexture(GL_TEXTURE_2D, a.ad.Terrainid);
+         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+        glColor3f(1,1,1);
+
+          glBegin(GL_POLYGON);
+            glTexCoord2f(1,0);
+            glVertex3f(10,-10,0);
+            glTexCoord2f(1,1);
+            glVertex3f(10,10,0);
+            glTexCoord2f(0,1);
+            glVertex3f(-10,10,0);
+            glTexCoord2f(0,0);
+            glVertex3f(-10,-10,0);
+          glEnd();
+        glFlush();
+        glutSwapBuffers();
+
+  }
+else{
+
   // cout<<a.terrainheight*SCALE/2.0<<" "<<a.terrainwidth*SCALE/2.0<<endl;
    random_device rd;
    mt19937 gen(rd());
    uniform_int_distribution<> dis(0, 2);
    
 glEnable(GL_LIGHTING);
-
-
-
-
-
-
-
-
-
 
 cout << "size "<< toruss.size() <<  " "<< trees.size() << " "<< stars.size() << endl;
    	keyOperations();
@@ -610,9 +641,14 @@ GLfloat light_position2[] = { 500, t3, 500.0, 1.0 };
      glEnable(GL_LIGHT2);
 
 
-
+         glMatrixMode(GL_PROJECTION);
+         glLoadIdentity();
+         glOrtho(-10,10,-10,10,-10,10);
+         glMatrixMode(GL_MODELVIEW);
+         glLoadIdentity();
+         HUD(-9.5,9,0);
    glFlush ();
-   glutSwapBuffers();
+   glutSwapBuffers();}
 
 }
 
