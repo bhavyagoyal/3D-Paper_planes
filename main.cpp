@@ -16,30 +16,28 @@ double theta,phi,starang=0;;
 double x,t1,t2,t3,planex,planez,planey,SCALE,HEIGHTSCALE;
 int t1obj=1,t2obj=1,t3obj=1;
 ParticleEngine* _particleEngine;GLfloat aspect;
-
+bool pauseflag=false;
+int score =0;
 vector<pair<double,double>> trees = {};
 vector<pair<double,double>> toruss = {};
 vector<pair<double,double>> stars = {};
 
 
 void keyOperations (void) {
-if (keyStates[GLUT_KEY_F5]) {
-  x+=10;
-  if(x>360)
-    x-=360;
+    if (keyStates[GLUT_KEY_F5]) {
+      x+=10;
+      if(x>360)
+        x-=360;
 
-}
-if(keyStates[GLUT_KEY_F6])
-{
-	planey+=100*refreshMills/1000.0;
-}
-if(keyStates[GLUT_KEY_F3])
-{
-
-}
+    }
+    if(keyStates[GLUT_KEY_F6])
+    {
+        planey+=100*refreshMills/1000.0;
+    }
 }
 
 void keyPressed (int key, int x, int y) {
+  if(!pauseflag){
 keyStates[key] = true;
 //cout << "x " << x << " y "<< y << endl;
 planex+=(x-viewx/2)*2.0/viewx;
@@ -59,7 +57,14 @@ if(planez<6)
   planez=6;
 else if(planez>20)
   planez=20;
+
+
+  }
+
+
+
 }
+
 
 void keyUp (int key, int x, int y) {
 keyStates[key] = false;
@@ -200,12 +205,12 @@ bool check(){
 
     if(t1obj==1){
       //cout<<t1+a.terrainwidth*SCALE/2.0<<endl;
-      if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t1+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t1+a.terrainwidth*SCALE/2.0))>=-15)  ) {
+      if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t1+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t1+a.terrainwidth*SCALE/2.0))>=-11)  ) {
         // cout << planex << " x "<< planey << " y "<< planez << endl;
         // cout << "lower part"<< endl;
         return true;
       }
-      else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<=15 && ((planey-(t1+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t1+a.terrainwidth*SCALE/2.0))>=-15) )
+      else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<=15 && ((planey-(t1+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t1+a.terrainwidth*SCALE/2.0))>=-11) )
       { 
         //   cout << planex << " x "<< planey << " y "<< planez << endl;
         // cout << "upper part"<< endl;
@@ -223,12 +228,12 @@ bool check(){
     // cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
     if(t2obj==1){
       // cout<<t2+a.terrainwidth*SCALE/2.0<<endl;
-      if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t2+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t2+a.terrainwidth*SCALE/2.0))>=-15)  ) {
+      if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t2+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t2+a.terrainwidth*SCALE/2.0))>=-11)  ) {
         // cout << planex << " x "<< planey << " y "<< planez << endl;
         // cout << "lower part"<< endl;
         return true;
       }
-      else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<15 && ((planey-(t2+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t2+a.terrainwidth*SCALE/2.0))>=-15) )
+      else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<15 && ((planey-(t2+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t2+a.terrainwidth*SCALE/2.0))>=-11) )
       { 
         //   cout << planex << " x "<< planey << " y "<< planez << endl;
         // cout << "upper part"<< endl;
@@ -244,12 +249,12 @@ bool check(){
     // cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
     if(t3obj==1){
       // cout<<t3+a.terrainwidth*SCALE/2.0<<endl;
-    if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t3+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t3+a.terrainwidth*SCALE/2.0))>=-15) ) {
+    if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t3+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t3+a.terrainwidth*SCALE/2.0))>=-11) ) {
         // cout << planex << " x "<< planey << " y "<< planez << endl;
         // cout << "lower part"<< endl;
         return true;
       }
-      else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<15 && ((planey-(t3+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t3+a.terrainwidth*SCALE/2.0))>=-15) )
+      else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<15 && ((planey-(t3+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t3+a.terrainwidth*SCALE/2.0))>=-11) )
       { 
         //   cout << planex << " x "<< planey << " y "<< planez << endl;
         // cout << "upper part"<< endl;
@@ -275,6 +280,7 @@ bool check2(){
       // cout<<abs(planey-trees[trees.size()-i-1].second)<<" "<<abs(planex-trees[trees.size()-i-1].second)<< endl;
       if( abs(planey-stars[stars.size()-i-1].second)<=2 && ((planex-stars[stars.size()-i-1].first)*(planex-stars[stars.size()-i-1].first)+(planez-10)*(planez-10))<=4){
         cout<<"star"<<endl;
+        stars.erase(stars.begin()+stars.size()-i);
         return true;
 
       }
@@ -580,10 +586,12 @@ cout << "size "<< toruss.size() <<  " "<< trees.size() << " "<< stars.size() << 
     //glutSolidSphere(20,20,20);
     if(check()){
       cout<<"hit"<<endl;
+      pauseflag = true;
     }
 
     if(check2()){
       cout<<"bonus"<<endl;
+      score+=15;
     }
 
 
