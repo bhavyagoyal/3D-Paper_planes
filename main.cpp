@@ -11,12 +11,13 @@ using namespace std;
 terrain a("hm1.bmp","tex.bmp"),b("hm1.bmp","tex.bmp"),c("hm1.bmp","tex.bmp"),foun("Palm.bmp","Palm.bmp");
 int front=1,viewx,viewy;
 bool* keyStates = new bool[256];
-GLuint plane,house,tree,terrain1,terrain2,terrain3,cube;
+GLuint plane,house,tree,star,terrain1,terrain2,terrain3,cube;
 double theta,phi;
 double x,t1,t2,t3,planex,planez,planey,SCALE,HEIGHTSCALE;
-int t1obj,t2obj,t3obj;
+int t1obj=1,t2obj=1,t3obj=1;
 ParticleEngine* _particleEngine;GLfloat aspect;
 
+vector<pair<double,double>> trees = {};
 
 
 
@@ -30,7 +31,7 @@ if (keyStates[GLUT_KEY_F5]) {
 }
 if(keyStates[GLUT_KEY_F6])
 {
-	planey+=10;
+	planey+=3;
 }
 if(keyStates[GLUT_KEY_F3])
 {
@@ -93,17 +94,27 @@ void planef()
     glPopMatrix();
 }
 
-void treef()
+void treef(double aa,double bb)
 {
 	glPushMatrix();
-	glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,10);
-  glPushMatrix();
-   glRotatef(90,1,0,0);
+	glTranslatef(aa,bb,10);
+  // glPushMatrix();
+   glRotatef(90,0,0,1);
   glScalef(5,5,5);
   	glCallList(tree);
+    // glPopMatrix();
+    // glTranslatef(0,0,1);  
+    // glutSolidSphere(3,20,20);
     glPopMatrix();
-    glTranslatef(0,0,1);  
-    glutSolidSphere(3.5,20,20);
+}
+
+
+void starf(){
+  glPushMatrix();
+  glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,10);
+    glTranslatef(0,0,4); 
+    glRotatef(180,0,1,0); 
+    glCallList(star);
     glPopMatrix();
 }
 
@@ -120,26 +131,44 @@ void cubef()
 
 
 bool check(){
-  cout << planex << " px "<< planey<<"py"<<planez << " pz "<< endl;
+  // cout << planex << " px "<< planey<<"py"<<planez << " pz "<< endl;
+  // cout<<trees[0].first <<" "<<trees[0].second<<"t"<<endl;
+  for(int i=0;i<trees.size();i++){
+    if(trees[trees.size()-i-1].second+40<planey){
+      // cout<<"hh"<<endl;
+      break;
+    }
+    else{
+      // cout<<"here"<<endl;
+      // cout<<abs(planey-trees[trees.size()-i-1].second)<<" "<<abs(planex-trees[trees.size()-i-1].second)<< endl;
+      if( abs(planey-trees[trees.size()-i-1].second)<4 && abs(planex-trees[trees.size()-i-1].first)<4 && planez<=15 && planez>=7){
+        cout<<"treeee"<<endl;
+        return true;
+
+      }
+    }
+  }
+
+
   if(front==1){
 
-    cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
-    cout << abs(planey-(t1+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
-    cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
+    // cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
+    // cout << abs(planey-(t1+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
+    // cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
 
 
 
     if(t1obj==0){
       //cout<<t1+a.terrainwidth*SCALE/2.0<<endl;
       if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t1+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t1+a.terrainwidth*SCALE/2.0))>=-15)  ) {
-        cout << planex << " x "<< planey << " y "<< planez << endl;
-        cout << "lower part"<< endl;
+        // cout << planex << " x "<< planey << " y "<< planez << endl;
+        // cout << "lower part"<< endl;
         return true;
       }
       else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<=15 && ((planey-(t1+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t1+a.terrainwidth*SCALE/2.0))>=-15) )
       { 
-          cout << planex << " x "<< planey << " y "<< planez << endl;
-        cout << "upper part"<< endl;
+        //   cout << planex << " x "<< planey << " y "<< planez << endl;
+        // cout << "upper part"<< endl;
           return true;
 
       }
@@ -152,20 +181,20 @@ bool check(){
   }
   else if(front==2){
 
-    cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
-    cout << abs(planey-(t2+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
-    cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
+    // cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
+    // cout << abs(planey-(t2+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
+    // cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
     if(t2obj==0){
       // cout<<t2+a.terrainwidth*SCALE/2.0<<endl;
       if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t2+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t2+a.terrainwidth*SCALE/2.0))>=-15)  ) {
-        cout << planex << " x "<< planey << " y "<< planez << endl;
-        cout << "lower part"<< endl;
+        // cout << planex << " x "<< planey << " y "<< planez << endl;
+        // cout << "lower part"<< endl;
         return true;
       }
       else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<15 && ((planey-(t2+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t2+a.terrainwidth*SCALE/2.0))>=-15) )
       { 
-          cout << planex << " x "<< planey << " y "<< planez << endl;
-        cout << "upper part"<< endl;
+        //   cout << planex << " x "<< planey << " y "<< planez << endl;
+        // cout << "upper part"<< endl;
           return true;
 
       }
@@ -173,20 +202,20 @@ bool check(){
   }
   else{
 
-    cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
-    cout << abs(planey-(t3+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
-    cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
+    // cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
+    // cout << abs(planey-(t3+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
+    // cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
     if(t3obj==0){
       // cout<<t3+a.terrainwidth*SCALE/2.0<<endl;
     if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t3+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t3+a.terrainwidth*SCALE/2.0))>=-15) ) {
-        cout << planex << " x "<< planey << " y "<< planez << endl;
-        cout << "lower part"<< endl;
+        // cout << planex << " x "<< planey << " y "<< planez << endl;
+        // cout << "lower part"<< endl;
         return true;
       }
       else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<15 && ((planey-(t3+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t3+a.terrainwidth*SCALE/2.0))>=-15) )
       { 
-          cout << planex << " x "<< planey << " y "<< planez << endl;
-        cout << "upper part"<< endl;
+        //   cout << planex << " x "<< planey << " y "<< planez << endl;
+        // cout << "upper part"<< endl;
           return true;
 
       }
@@ -231,7 +260,7 @@ void display(void)
         _particleEngine->draw();
       }
    	else if(t1obj==1)
-   		treef();
+   		starf();
    	else
    		cubef();
    	glPopMatrix();
@@ -244,7 +273,7 @@ void display(void)
 	 if(t2obj==0)
    		housef();
    	else if(t2obj==1)
-   		treef();
+   		starf();
    	else
    		cubef();
    	glPopMatrix();
@@ -256,10 +285,23 @@ void display(void)
    	if(t3obj==0)
    		housef();
    	else if(t3obj==1)
-   		treef();
+   		starf();
    	else
    		cubef();
    	glPopMatrix();
+
+
+    for(int i=0;i<trees.size();i++){
+      if(trees[trees.size()-i-1].second+50<planey){
+        break;
+      }
+      else{
+        treef(trees[trees.size()-i-1].first,trees[trees.size()-i-1].second);
+      }
+    }
+
+
+
 
 	if(front==1 && planey>(t1+(a.terrainwidth)*SCALE)+10)
 	{
@@ -279,8 +321,8 @@ void display(void)
 		t3+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
 		t3obj=dis(gen);
 	}
-	cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
-  cout<<a.terrainheight*SCALE<<endl;
+	// cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
+ //  cout<<a.terrainheight*SCALE<<endl;
 	// cout << "planey "<<planey << endl;
 	/***********************************************************PHYSICS *******************************************************/
 	// cout << planex << " px "<< planez << " pz "<< endl;
@@ -322,9 +364,9 @@ void init()
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    Objectrender dirtbike("plane-fd.obj","wall.bmp");
    Objectrender hous("House.obj","wall.bmp");
-   Objectrender tre("Tree.obj","Tree.bmp");
+   Objectrender tre("Palm.obj","Palm.bmp");
    Objectrender cub("cube.obj","cube.bmp");
-   Objectrender star("star.obj","cube.bmp");
+   Objectrender sta("star.obj","cube.bmp");
    cerr << "error crossed"<< endl;
    a.Read();
    b.Read();
@@ -334,12 +376,17 @@ void init()
    _particleEngine=new ParticleEngine(foun.ad.Terrainid);
    
    x=0;t1=0;t2=(a.terrainwidth)*SCALE;t3=t2+(b.terrainwidth)*SCALE;planey=0;
+   trees.push_back(make_pair(a.terrainheight*SCALE/2.0 + 7,t1+(a.terrainwidth)*SCALE/2.0));
+   trees.push_back(make_pair(a.terrainheight*SCALE/2.0 - 7,t1+(a.terrainwidth)*SCALE/2.0));
+   trees.push_back(make_pair(a.terrainheight*SCALE/2.0 + 7,t2+(a.terrainwidth)*SCALE/2.0));
+   trees.push_back(make_pair(a.terrainheight*SCALE/2.0 - 7,t2+(a.terrainwidth)*SCALE/2.0));
+
    planex=a.terrainwidth*SCALE/2.0;
    planez=10.0;
    
    plane = glGenLists(1);
    glNewList(plane, GL_COMPILE);
-   star.Render();
+   dirtbike.Render();
    glEndList();
    
    house=glGenLists(10);
@@ -351,6 +398,12 @@ void init()
    glNewList(tree,GL_COMPILE);
    tre.Render();
    glEndList();
+
+   star=glGenLists(5);
+   glNewList(star,GL_COMPILE);
+   sta.Render();
+   glEndList();
+
    
    cube=glGenLists(4);
    glNewList(cube,GL_COMPILE);
