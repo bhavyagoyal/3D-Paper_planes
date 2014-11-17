@@ -19,7 +19,7 @@ ParticleEngine* _particleEngine;GLfloat aspect;
 
 vector<pair<double,double>> trees = {};
 vector<pair<double,double>> toruss = {};
-
+vector<pair<double,double>> stars = {};
 
 
 void keyOperations (void) {
@@ -109,13 +109,16 @@ void treef(double aa,double bb)
 }
 
 
-void torusf(){
+void starf(double aa,double bb){
   glPushMatrix();
-  glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,10);
-    glTranslatef(0,0,4); 
+  glTranslatef(aa,bb,10);
+    // glTranslatef(0,0,4);
+    // glPushMatrix();
     glRotatef(starang,0,0,1);
     glRotatef(180,0,1,0); 
     glCallList(star);
+    // glPopMatrix();
+    // glutSolidSphere(0.8,20,20);
     glPopMatrix();
 }
 
@@ -264,6 +267,27 @@ return false;
 }
 
 
+bool check2(){
+  for(int i=0;i<stars.size();i++){
+    if(stars[stars.size()-i-1].second+40<planey){
+      // cout<<"hh"<<endl;
+      break;
+    }
+    else{
+      // cout<<"here"<<endl;
+      // cout<<abs(planey-trees[trees.size()-i-1].second)<<" "<<abs(planex-trees[trees.size()-i-1].second)<< endl;
+      if( abs(planey-stars[stars.size()-i-1].second)<=2 && ((planex-stars[stars.size()-i-1].first)*(planex-stars[stars.size()-i-1].first)+(planez-10)*(planez-10))<=4){
+        cout<<"star"<<endl;
+        return true;
+
+      }
+    }
+  }
+}
+
+
+
+
 /*********************************DISPLAY*********************************/
 
 void display(void)
@@ -300,7 +324,7 @@ void display(void)
         _particleEngine->draw();
       }
    	else if(t1obj==1)
-   		torusf();
+      toruss.push_back(make_pair(a.terrainheight*SCALE/2.0,t1+a.terrainwidth*SCALE/2.0));
    	else
    		housef();
    	glPopMatrix();
@@ -322,7 +346,7 @@ void display(void)
         _particleEngine->draw();
       }
    	else if(t2obj==1)
-   		torusf();
+      toruss.push_back(make_pair(a.terrainheight*SCALE/2.0,t2+a.terrainwidth*SCALE/2.0));
    	else
    		housef();
    	glPopMatrix();
@@ -342,7 +366,7 @@ void display(void)
         _particleEngine->draw();
       }
    	else if(t3obj==1)
-   		torusf();
+   		toruss.push_back(make_pair(a.terrainheight*SCALE/2.0,t3+a.terrainwidth*SCALE/2.0));
    	else
    		housef();
    	glPopMatrix();
@@ -365,6 +389,16 @@ void display(void)
         torusf(toruss[toruss.size()-i-1].first,toruss[toruss.size()-i-1].second);
       }
     }
+
+    for(int i=0;i<stars.size();i++){
+      if(stars[stars.size()-i-1].second+50<planey){
+        break;
+      }
+      else{
+        starf(stars[stars.size()-i-1].first,stars[stars.size()-i-1].second);
+      }
+    }
+
 
 
 
@@ -415,6 +449,10 @@ void display(void)
       cout<<"hit"<<endl;
     }
 
+    if(check2()){
+      cout<<"bonus"<<endl;
+    }
+
 
    glFlush ();
    glutSwapBuffers();
@@ -457,12 +495,15 @@ void init()
    trees.push_back(make_pair(a.terrainheight*SCALE/2.0 + 7,t2+(a.terrainwidth)*SCALE/2.0));
    trees.push_back(make_pair(a.terrainheight*SCALE/2.0 - 7,t2+(a.terrainwidth)*SCALE/2.0));
 
-   toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t1+(a.terrainwidth)*SCALE/2.0));
-   toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t1+(a.terrainwidth)*SCALE/2.0));
+   // toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t1+(a.terrainwidth)*SCALE/2.0));
+   // toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t1+(a.terrainwidth)*SCALE/2.0));
 
-   toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t2+(a.terrainwidth)*SCALE/2.0));
-   toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t2+(a.terrainwidth)*SCALE/2.0));
+   // toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t2+(a.terrainwidth)*SCALE/2.0));
+   // toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t2+(a.terrainwidth)*SCALE/2.0));
 
+
+   stars.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t1+(a.terrainwidth)*SCALE/2.0));
+   // toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t1+(a.terrainwidth)*SCALE/2.0));
 
 
    planex=a.terrainwidth*SCALE/2.0;
