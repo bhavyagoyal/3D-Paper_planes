@@ -3,7 +3,7 @@
 #include "global.h"
 #include "terrain.h"
 #include "particle.cpp"
-#define refreshMills 20
+#define refreshMills 10
 
 using namespace std;
 
@@ -298,7 +298,18 @@ void display(void)
    mt19937 gen(rd());
    uniform_int_distribution<> dis(0, 2);
    
+glEnable(GL_LIGHTING);
 
+
+
+
+
+
+
+
+
+
+cout << "size "<< toruss.size() <<  " "<< trees.size() << " "<< stars.size() << endl;
    	keyOperations();
    	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    	glMatrixMode(GL_PROJECTION);
@@ -314,6 +325,13 @@ void display(void)
     glPushMatrix();
     glTranslatef(0,0,5);
     glCallList(terrain1);
+
+    GLfloat light_position[] = { 500, 0, 500.0, 1.0 };
+    GLfloat mat_specular[]={1,1,1,1};
+    glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_specular);
+  // glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_shininess);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+     glEnable(GL_LIGHT0);
     glPopMatrix();
     if(t1obj==0)
    		{
@@ -323,9 +341,8 @@ void display(void)
         glRotatef(90,1,0,0);
         _particleEngine->draw();
       }
-   	
-   	else
-   		housef();
+   	else if(t1obj==1)
+   	 		housef();
    	glPopMatrix();
     
    
@@ -334,6 +351,11 @@ void display(void)
     glPushMatrix();
     glTranslatef(0,0,5);
     glCallList(terrain2);
+
+ glLightfv(GL_LIGHT1,GL_DIFFUSE,mat_specular);
+  // glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_shininess);
+    glLightfv(GL_LIGHT1, GL_POSITION, light_position);
+     glEnable(GL_LIGHT1);
     glPopMatrix();
     
 	 if(t2obj==0)
@@ -345,7 +367,7 @@ void display(void)
         _particleEngine->draw();
       }
    
-   	else
+   	else if(t2obj==1)
    		housef();
    	glPopMatrix();
 
@@ -353,6 +375,13 @@ void display(void)
     glTranslatef(0,t3,0);
     glPushMatrix();
     glTranslatef(0,0,5);
+
+
+
+ glLightfv(GL_LIGHT2,GL_DIFFUSE,mat_specular);
+  // glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_shininess);
+    glLightfv(GL_LIGHT2, GL_POSITION, light_position);
+     glEnable(GL_LIGHT2);
    	glCallList(terrain3);
    	glPopMatrix();
    	if(t3obj==0)
@@ -363,9 +392,8 @@ void display(void)
         glRotatef(90,1,0,0);
         _particleEngine->draw();
       }
+   	
    	else if(t3obj==1)
-   		toruss.push_back(make_pair(a.terrainheight*SCALE/2.0,t3+a.terrainwidth*SCALE/2.0));
-   	else
    		housef();
    	glPopMatrix();
 
@@ -405,7 +433,7 @@ void display(void)
   {
     front=2;
     t1+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
-    t1obj=dis(gen);t1obj%=2;
+    t1obj=dis(gen);t1obj%=3;
     int y=dis(gen);
     int z=dis(gen);
     if(y%3==0)
@@ -417,9 +445,9 @@ void display(void)
       else if(z%4==2)
         trees.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
       else
-        tress.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
     }
-    else if(y%3==1)
+    else if(y%3==1 && t1obj==2)
      {
 
       if(z%4==0)
@@ -455,37 +483,37 @@ void display(void)
     if(y%3==0)
     {
       if(z%4==0)
-        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t2+a.terrainheight*SCALE/2.0-15));
       else if(z%4==1)
-        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t2+a.terrainheight*SCALE/2.0+15));
       else if(z%4==2)
-        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t2+a.terrainheight*SCALE/2.0));
       else
-        tress.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t2+a.terrainheight*SCALE/2.0));
     }
-    else if(y%3==1)
+    else if(y%3==1 || t2obj==2)
      {
 
       if(z%4==0)
-        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t2+a.terrainheight*SCALE/2.0-15));
       else if(z%4==1)
-        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t2+a.terrainheight*SCALE/2.0+15));
       else if(z%4==2)
-        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t2+a.terrainheight*SCALE/2.0));
       else
-        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t2+a.terrainheight*SCALE/2.0));
     
      }
      else
      {
         if(z%4==0)
-        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t2+a.terrainheight*SCALE/2.0-15));
       else if(z%4==1)
-        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t2+a.terrainheight*SCALE/2.0+15));
       else if(z%4==2)
-        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t2+a.terrainheight*SCALE/2.0));
       else
-        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t2+a.terrainheight*SCALE/2.0));
      }
     
   }
@@ -499,37 +527,37 @@ void display(void)
     if(y%3==0)
     {
       if(z%4==0)
-        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t3+a.terrainheight*SCALE/2.0-15));
       else if(z%4==1)
-        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0,t3+a.terrainheight*SCALE/2.0+15));
       else if(z%4==2)
-        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t3+a.terrainheight*SCALE/2.0));
       else
-        tress.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+        trees.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t3+a.terrainheight*SCALE/2.0));
     }
-    else if(y%3==1)
+    else if(y%3==1 && t3obj==2)
      {
 
       if(z%4==0)
-        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t3+a.terrainheight*SCALE/2.0-15));
       else if(z%4==1)
-        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0,t3+a.terrainheight*SCALE/2.0+15));
       else if(z%4==2)
-        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t3+a.terrainheight*SCALE/2.0));
       else
-        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+        toruss.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t3+a.terrainheight*SCALE/2.0));
     
      }
      else
      {
         if(z%4==0)
-        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0-15));
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t3+a.terrainheight*SCALE/2.0-15));
       else if(z%4==1)
-        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t1+a.terrainheight*SCALE/2.0+15));
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0,t3+a.terrainheight*SCALE/2.0+15));
       else if(z%4==2)
-        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t1+a.terrainheight*SCALE/2.0));
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0-7,t3+a.terrainheight*SCALE/2.0));
       else
-        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t1+a.terrainheight*SCALE/2.0));
+        stars.push_back(make_pair(a.terrainwidth*SCALE/2.0+7,t3+a.terrainheight*SCALE/2.0));
      }
     
   }
@@ -539,6 +567,7 @@ void display(void)
 	/***********************************************************PHYSICS *******************************************************/
 	// cout << planex << " px "<< planez << " pz "<< endl;
 	glPushMatrix();
+
 	glTranslatef(planex,planey,planez);
     glRotatef(90,1,0,0);
    	glRotatef(theta,1,0,0);
@@ -557,8 +586,25 @@ void display(void)
     }
 
 
+GLfloat light_position1[] = { 500, t2, 500.0, 1.0 };
+
+ glLightfv(GL_LIGHT1,GL_DIFFUSE,mat_specular);
+  // glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_shininess);
+    glLightfv(GL_LIGHT1, GL_POSITION, light_position1);
+     glEnable(GL_LIGHT1);
+
+GLfloat light_position2[] = { 500, t3, 500.0, 1.0 };
+
+ glLightfv(GL_LIGHT2,GL_DIFFUSE,mat_specular);
+  // glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_shininess);
+    glLightfv(GL_LIGHT2, GL_POSITION, light_position2);
+     glEnable(GL_LIGHT2);
+
+
+
    glFlush ();
    glutSwapBuffers();
+
 }
 
 /********************************INIT***************************************/
@@ -578,7 +624,7 @@ void init()
    glEnable(GL_NORMALIZE);
     glClearColor (0.4, 0.4,1.0, 1.0);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   Objectrender dirtbike("plane-fd.obj","wall.bmp");
+   Objectrender dirtbike("plane-fd.obj","Palm.bmp");
    Objectrender hous("House.obj","wall.bmp");
    Objectrender tre("Palm.obj","Palm.bmp");
    Objectrender cub("cube.obj","cube.bmp");
@@ -661,15 +707,11 @@ void init()
    c.Render();
    glEndList();
    
-   GLfloat mat_specular[] = { 1, 1,1, 1};
+   //GLfloat mat_specular[] = { 1, 1,1, 1};
 
    theta =0;
    phi=0;
- GLfloat light_position[] = { 100, 100, 100.0, 1.0 };
- glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_specular);
-  // glLightfv(GL_LIGHT0,GL_DIFFUSE,mat_shininess);
-   	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-     glEnable(GL_LIGHT0);
+ 
 }
 
 
