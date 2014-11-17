@@ -71,10 +71,13 @@ void housef()
 {
 	glPushMatrix();
 	glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,10);
+   glPushMatrix();
    glRotatef(90,1,0,0);
   	glScalef(5,10,10);
-    // glutSolidSphere(2,20,20);
-  	glCallList(house);
+glCallList(house);
+glPopMatrix();
+     //glutSolidSphere(5.25,20,20);
+  	
     glPopMatrix();
 }
 
@@ -94,9 +97,13 @@ void treef()
 {
 	glPushMatrix();
 	glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,10);
-   //glRotatef(90,-1,0,0);
+  glPushMatrix();
+   glRotatef(90,1,0,0);
   glScalef(5,5,5);
   	glCallList(tree);
+    glPopMatrix();
+    glTranslatef(0,0,1);  
+    glutSolidSphere(3.5,20,20);
     glPopMatrix();
 }
 
@@ -113,28 +120,75 @@ void cubef()
 
 
 bool check(){
-  //cout << planex << " px "<< planey<<"py"<<planez << " pz "<< endl;
+  cout << planex << " px "<< planey<<"py"<<planez << " pz "<< endl;
   if(front==1){
+
+    cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
+    cout << abs(planey-(t1+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
+    cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
+
+
+
     if(t1obj==0){
       //cout<<t1+a.terrainwidth*SCALE/2.0<<endl;
-      if( abs(planex-(a.terrainheight*SCALE/2.0))<3 && abs(planez)<17.5 && abs(planey-(t1+a.terrainwidth*SCALE/2.0))<15) {
+      if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t1+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t1+a.terrainwidth*SCALE/2.0))>=-15)  ) {
+        cout << planex << " x "<< planey << " y "<< planez << endl;
+        cout << "lower part"<< endl;
         return true;
       }
+      else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<=15 && ((planey-(t1+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t1+a.terrainwidth*SCALE/2.0))>=-15) )
+      { 
+          cout << planex << " x "<< planey << " y "<< planez << endl;
+        cout << "upper part"<< endl;
+          return true;
+
+      }
+    }
+
+    else if(t1obj==1)
+    {
+
     }
   }
   else if(front==2){
+
+    cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
+    cout << abs(planey-(t2+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
+    cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
     if(t2obj==0){
       // cout<<t2+a.terrainwidth*SCALE/2.0<<endl;
-      if( abs(planex-(a.terrainheight*SCALE/2.0))<3 && abs(planez)<17.5 && abs(planey-(t2+a.terrainwidth*SCALE/2.0))<15) {
+      if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t2+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t2+a.terrainwidth*SCALE/2.0))>=-15)  ) {
+        cout << planex << " x "<< planey << " y "<< planez << endl;
+        cout << "lower part"<< endl;
         return true;
+      }
+      else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<15 && ((planey-(t2+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t2+a.terrainwidth*SCALE/2.0))>=-15) )
+      { 
+          cout << planex << " x "<< planey << " y "<< planez << endl;
+        cout << "upper part"<< endl;
+          return true;
+
       }
     }
   }
   else{
+
+    cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
+    cout << abs(planey-(t3+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
+    cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
     if(t3obj==0){
       // cout<<t3+a.terrainwidth*SCALE/2.0<<endl;
-      if( abs(planex-(a.terrainheight*SCALE/2.0))<3 && abs(planez)<17.5 && abs(planey-(t3+a.terrainwidth*SCALE/2.0))<15) {
+    if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t3+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t3+a.terrainwidth*SCALE/2.0))>=-15) ) {
+        cout << planex << " x "<< planey << " y "<< planez << endl;
+        cout << "lower part"<< endl;
         return true;
+      }
+      else if(5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10)<=18.5 && abs(planez)>10 && planez<15 && ((planey-(t3+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t3+a.terrainwidth*SCALE/2.0))>=-15) )
+      { 
+          cout << planex << " x "<< planey << " y "<< planez << endl;
+        cout << "upper part"<< endl;
+          return true;
+
       }
     }
   }
@@ -268,8 +322,9 @@ void init()
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    Objectrender dirtbike("plane-fd.obj","wall.bmp");
    Objectrender hous("House.obj","wall.bmp");
-   Objectrender tre("Palm.obj","Palm.bmp");
+   Objectrender tre("Tree.obj","Tree.bmp");
    Objectrender cub("cube.obj","cube.bmp");
+   Objectrender star("star.obj","cube.bmp");
    cerr << "error crossed"<< endl;
    a.Read();
    b.Read();
@@ -284,7 +339,7 @@ void init()
    
    plane = glGenLists(1);
    glNewList(plane, GL_COMPILE);
-   dirtbike.Render();
+   star.Render();
    glEndList();
    
    house=glGenLists(10);
