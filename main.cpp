@@ -11,14 +11,14 @@ using namespace std;
 terrain a("hm1.bmp","tex.bmp"),b("hm1.bmp","tex.bmp"),c("hm1.bmp","tex.bmp"),foun("Palm.bmp","Palm.bmp");
 int front=1,viewx,viewy;
 bool* keyStates = new bool[256];
-GLuint plane,house,tree,star,terrain1,terrain2,terrain3,cube;
+GLuint plane,house,tree,star,terrain1,terrain2,terrain3,cube,torus;
 double theta,phi,starang=0;;
 double x,t1,t2,t3,planex,planez,planey,SCALE,HEIGHTSCALE;
 int t1obj=1,t2obj=1,t3obj=1;
 ParticleEngine* _particleEngine;GLfloat aspect;
 
 vector<pair<double,double>> trees = {};
-
+vector<pair<double,double>> toruss = {};
 
 
 
@@ -57,8 +57,8 @@ else if(planex > a.terrainwidth*SCALE)
 }
 if(planez<6)
   planez=6;
-else if(planez>10)
-  planez=10;
+else if(planez>20)
+  planez=20;
 }
 
 void keyUp (int key, int x, int y) {
@@ -131,6 +131,23 @@ void cubef()
 }
 
 
+void torusf(double aa,double bb){
+  glPushMatrix();
+  glTranslatef(aa,bb,10);
+  // glPushMatrix();
+   // glRotatef(90,0,0,1);
+  glScalef(6,6,6);
+    glCallList(torus);
+  glPopMatrix();
+    // glPopMatrix();
+    // glTranslatef(0,0,1);  
+    // glutSolidSphere(6,20,20);
+    // glPopMatrix();
+    // glPopMatrix();
+
+}
+
+
 bool check(){
   // cout << planex << " px "<< planey<<"py"<<planez << " pz "<< endl;
   // cout<<trees[0].first <<" "<<trees[0].second<<"t"<<endl;
@@ -149,6 +166,25 @@ bool check(){
       }
     }
   }
+
+ for(int i=0;i<toruss.size();i++){
+    if(toruss[toruss.size()-i-1].second+40<planey){
+      // cout<<"hh"<<endl;
+      break;
+    }
+    else{
+      //cout<<"here"<<endl;
+      // cout<<abs(planey-trees[trees.size()-i-1].second)<<" "<<abs(planex-trees[trees.size()-i-1].second)<< endl;
+      if( abs(planey-toruss[toruss.size()-i-1].second)<4 && ((planex-toruss[toruss.size()-i-1].first)*(planex-toruss[toruss.size()-i-1].first)+(planez-10)*(planez-10))<=49){
+        //cout<<"here2"<<endl;
+       if( abs(planey-toruss[toruss.size()-i-1].second)<4 && ((planex-toruss[toruss.size()-i-1].first)*(planex-toruss[toruss.size()-i-1].first)+(planez-10)*(planez-10))>=10){
+          cout<<"torus"<<endl;
+          return true;
+        }
+      }
+    }
+  }
+
 
 
   if(front==1){
@@ -246,7 +282,7 @@ void display(void)
 	  gluPerspective(60.0f, aspect, 0.05f, 1000.0f);
    	glMatrixMode(GL_MODELVIEW);
    	glLoadIdentity();
-    gluLookAt(a.terrainheight*SCALE/2.0,-5+planey,10,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
+    gluLookAt(a.terrainheight*SCALE/2.0,-20+planey,15,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
    
 
     glPushMatrix();
@@ -321,6 +357,14 @@ void display(void)
       }
     }
 
+    for(int i=0;i<toruss.size();i++){
+      if(toruss[toruss.size()-i-1].second+50<planey){
+        break;
+      }
+      else{
+        torusf(toruss[toruss.size()-i-1].first,toruss[toruss.size()-i-1].second);
+      }
+    }
 
 
 
@@ -398,6 +442,7 @@ void init()
    Objectrender tre("Palm.obj","Palm.bmp");
    Objectrender cub("cube.obj","cube.bmp");
    Objectrender sta("star.obj","cube.bmp");
+   Objectrender toru("toru.obj","ball.bmp");
    cerr << "error crossed"<< endl;
    a.Read();
    b.Read();
@@ -411,6 +456,14 @@ void init()
    trees.push_back(make_pair(a.terrainheight*SCALE/2.0 - 7,t1+(a.terrainwidth)*SCALE/2.0));
    trees.push_back(make_pair(a.terrainheight*SCALE/2.0 + 7,t2+(a.terrainwidth)*SCALE/2.0));
    trees.push_back(make_pair(a.terrainheight*SCALE/2.0 - 7,t2+(a.terrainwidth)*SCALE/2.0));
+
+   toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t1+(a.terrainwidth)*SCALE/2.0));
+   toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t1+(a.terrainwidth)*SCALE/2.0));
+
+   toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t2+(a.terrainwidth)*SCALE/2.0));
+   toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t2+(a.terrainwidth)*SCALE/2.0));
+
+
 
    planex=a.terrainwidth*SCALE/2.0;
    planez=10.0;
@@ -440,6 +493,14 @@ void init()
    glNewList(cube,GL_COMPILE);
    cub.Render();
    glEndList();
+
+
+   torus=glGenLists(6);
+   glNewList(torus,GL_COMPILE);
+   toru.Render();
+   glEndList();
+
+
    
    terrain1 = glGenLists(12);
    glNewList(terrain1, GL_COMPILE);
