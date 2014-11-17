@@ -3,7 +3,7 @@
 #include "global.h"
 #include "terrain.h"
 #include "particle.cpp"
-#define refreshMills 10
+#define refreshMills 20
 
 using namespace std;
 
@@ -12,7 +12,7 @@ terrain a("hm1.bmp","tex.bmp"),b("hm1.bmp","tex.bmp"),c("hm1.bmp","tex.bmp"),fou
 int front=1,viewx,viewy;
 bool* keyStates = new bool[256];
 GLuint plane,house,tree,star,terrain1,terrain2,terrain3,cube;
-double theta,phi;
+double theta,phi,starang=0;;
 double x,t1,t2,t3,planex,planez,planey,SCALE,HEIGHTSCALE;
 int t1obj=1,t2obj=1,t3obj=1;
 ParticleEngine* _particleEngine;GLfloat aspect;
@@ -31,7 +31,7 @@ if (keyStates[GLUT_KEY_F5]) {
 }
 if(keyStates[GLUT_KEY_F6])
 {
-	planey+=3;
+	planey+=100*refreshMills/1000.0;
 }
 if(keyStates[GLUT_KEY_F3])
 {
@@ -55,10 +55,10 @@ else if(planex > a.terrainwidth*SCALE)
 {
   planex=a.terrainwidth*SCALE;
 }
-if(planez<0)
-  planez=0;
-else if(planez>20)
-  planez=20;
+if(planez<6)
+  planez=6;
+else if(planez>10)
+  planez=10;
 }
 
 void keyUp (int key, int x, int y) {
@@ -109,10 +109,11 @@ void treef(double aa,double bb)
 }
 
 
-void starf(){
+void torusf(){
   glPushMatrix();
   glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,10);
     glTranslatef(0,0,4); 
+    glRotatef(starang,0,0,1);
     glRotatef(180,0,1,0); 
     glCallList(star);
     glPopMatrix();
@@ -158,7 +159,7 @@ bool check(){
 
 
 
-    if(t1obj==0){
+    if(t1obj==2){
       //cout<<t1+a.terrainwidth*SCALE/2.0<<endl;
       if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t1+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t1+a.terrainwidth*SCALE/2.0))>=-15)  ) {
         // cout << planex << " x "<< planey << " y "<< planez << endl;
@@ -184,7 +185,7 @@ bool check(){
     // cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
     // cout << abs(planey-(t2+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
     // cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
-    if(t2obj==0){
+    if(t2obj==2){
       // cout<<t2+a.terrainwidth*SCALE/2.0<<endl;
       if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t2+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t2+a.terrainwidth*SCALE/2.0))>=-15)  ) {
         // cout << planex << " x "<< planey << " y "<< planez << endl;
@@ -205,7 +206,7 @@ bool check(){
     // cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
     // cout << abs(planey-(t3+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
     // cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
-    if(t3obj==0){
+    if(t3obj==2){
       // cout<<t3+a.terrainwidth*SCALE/2.0<<endl;
     if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t3+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t3+a.terrainwidth*SCALE/2.0))>=-15) ) {
         // cout << planex << " x "<< planey << " y "<< planez << endl;
@@ -245,49 +246,69 @@ void display(void)
 	  gluPerspective(60.0f, aspect, 0.05f, 1000.0f);
    	glMatrixMode(GL_MODELVIEW);
    	glLoadIdentity();
-    gluLookAt(a.terrainheight*SCALE/2.0,-20+planey,15,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
+    gluLookAt(a.terrainheight*SCALE/2.0,-5+planey,10,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
    
 
     glPushMatrix();
     glTranslatef(0,t1,0);
+    glPushMatrix();
+    glTranslatef(0,0,5);
     glCallList(terrain1);
+    glPopMatrix();
     if(t1obj==0)
    		{
       //housef();
-        glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,4);
+        glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,5);
         glScalef(20.0f, 20.0f, 20.0f);
         glRotatef(90,1,0,0);
         _particleEngine->draw();
       }
    	else if(t1obj==1)
-   		starf();
+   		torusf();
    	else
-   		cubef();
+   		housef();
    	glPopMatrix();
     
    
     glPushMatrix();
     glTranslatef(0,t2,0);
+    glPushMatrix();
+    glTranslatef(0,0,5);
     glCallList(terrain2);
+    glPopMatrix();
     
 	 if(t2obj==0)
-   		housef();
+   		{
+      //housef();
+        glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,5);
+        glScalef(20.0f, 20.0f, 20.0f);
+        glRotatef(90,1,0,0);
+        _particleEngine->draw();
+      }
    	else if(t2obj==1)
-   		starf();
+   		torusf();
    	else
-   		cubef();
+   		housef();
    	glPopMatrix();
 
     glPushMatrix();
     glTranslatef(0,t3,0);
+    glPushMatrix();
+    glTranslatef(0,0,5);
    	glCallList(terrain3);
-   	
+   	glPopMatrix();
    	if(t3obj==0)
-   		housef();
+   		{
+      //housef();
+        glTranslatef(a.terrainheight*SCALE/2.0,a.terrainwidth*SCALE/2.0,5);
+        glScalef(20.0f, 20.0f, 20.0f);
+        glRotatef(90,1,0,0);
+        _particleEngine->draw();
+      }
    	else if(t3obj==1)
-   		starf();
+   		torusf();
    	else
-   		cubef();
+   		housef();
    	glPopMatrix();
 
 
@@ -308,18 +329,28 @@ void display(void)
 		front=2;
 		t1+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
 		t1obj=dis(gen);
+    int y=dis(gen);
+      trees.push_back(make_pair(a.terrainwidth*SCALE/2.0+6,t1+a.terrainheight*SCALE/2.0+15));
+   
 	}
 	else if(front==2 && planey>(t2+(b.terrainwidth)*SCALE)+10)
 	{
 		front=3;
 		t2+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
 		t2obj=dis(gen);
+    int y=dis(gen);
+    
+      trees.push_back(make_pair(a.terrainwidth*SCALE/2.0+6,t2+a.terrainheight*SCALE/2.0+15));
+    
 	}
 	else if(front==3 && planey>(t3+(c.terrainwidth)*SCALE+10))
 	{
 		front=1;
 		t3+=(a.terrainwidth+b.terrainwidth+c.terrainwidth)*SCALE;
 		t3obj=dis(gen);
+    int y=dis(gen);
+    trees.push_back(make_pair(a.terrainwidth*SCALE/2.0+6,t3+a.terrainheight*SCALE/2.0+15));
+    
 	}
 	// cout << "t1 "<<t1 << " t2 "<< t2 << " t3 "<< t3 << endl;
  //  cout<<a.terrainheight*SCALE<<endl;
@@ -335,7 +366,7 @@ void display(void)
    planef();
    	glPopMatrix();
 
-    glutSolidSphere(20,20,20);
+    //glutSolidSphere(20,20,20);
     if(check()){
       cout<<"hit"<<endl;
     }
@@ -455,6 +486,7 @@ void reshape (int w, int h)
 
 void timer(int value) {
    _particleEngine->advance(TIMER_MS / 1000.0f);
+   starang+=5;
    glutPostRedisplay();      // Post re-paint request to activate display()
    glutTimerFunc(refreshMills, timer, 0); // next timer call milliseconds later
 }

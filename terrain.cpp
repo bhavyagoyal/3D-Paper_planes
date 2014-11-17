@@ -165,7 +165,7 @@ Vec3f retvec(int i,int j,GLubyte* data,int terrainwidth)
   return Vec3f(i*SCALE,j*SCALE,data[(j)*terrainwidth*3+i*3+1]*SCALE*HEIGHTSCALE);
 }
 void terrain :: Read(void){
-      SCALE=0.5;
+      SCALE=0.2;
       HEIGHTSCALE=0.1;
  			Texture a(textures);
  			a.Terrainid=a.LoadImage();
