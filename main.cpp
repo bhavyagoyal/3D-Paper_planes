@@ -398,6 +398,7 @@ cout << "size "<< toruss.size() <<  " "<< trees.size() << " "<< stars.size() << 
 
     for(int i=0;i<trees.size();i++){
       if(trees[trees.size()-i-1].second+50<planey){
+        trees.erase(trees.begin(),trees.begin()+trees.size()-i);
         break;
       }
       else{
@@ -407,6 +408,7 @@ cout << "size "<< toruss.size() <<  " "<< trees.size() << " "<< stars.size() << 
 
     for(int i=0;i<toruss.size();i++){
       if(toruss[toruss.size()-i-1].second+50<planey){
+        toruss.erase(toruss.begin(),toruss.begin()+toruss.size()-i);
         break;
       }
       else{
@@ -416,6 +418,7 @@ cout << "size "<< toruss.size() <<  " "<< trees.size() << " "<< stars.size() << 
 
     for(int i=0;i<stars.size();i++){
       if(stars[stars.size()-i-1].second+50<planey){
+        stars.erase(stars.begin(),stars.begin()+stars.size()-i);
         break;
       }
       else{
