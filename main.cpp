@@ -198,7 +198,7 @@ bool check(){
 
 
 
-    if(t1obj==2){
+    if(t1obj==1){
       //cout<<t1+a.terrainwidth*SCALE/2.0<<endl;
       if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t1+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t1+a.terrainwidth*SCALE/2.0))>=-15)  ) {
         // cout << planex << " x "<< planey << " y "<< planez << endl;
@@ -214,17 +214,14 @@ bool check(){
       }
     }
 
-    else if(t1obj==1)
-    {
-
-    }
+    
   }
   else if(front==2){
 
     // cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
     // cout << abs(planey-(t2+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
     // cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
-    if(t2obj==2){
+    if(t2obj==1){
       // cout<<t2+a.terrainwidth*SCALE/2.0<<endl;
       if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t2+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t2+a.terrainwidth*SCALE/2.0))>=-15)  ) {
         // cout << planex << " x "<< planey << " y "<< planez << endl;
@@ -245,7 +242,7 @@ bool check(){
     // cout << planex-(a.terrainheight*SCALE/2.0) << " lllll"<< endl;
     // cout << abs(planey-(t3+a.terrainwidth*SCALE/2.0)) << " pppp"<< endl;
     // cout <<  5*abs(planex-(a.terrainheight*SCALE/2.0))+3*abs(planez-10) << " qqqqqqq"<< endl;
-    if(t3obj==2){
+    if(t3obj==1){
       // cout<<t3+a.terrainwidth*SCALE/2.0<<endl;
     if(abs(planex-(a.terrainheight*SCALE/2.0))<=3.7 && abs(planez)<10 && ((planey-(t3+a.terrainwidth*SCALE/2.0))<=6.25 && (planey-(t3+a.terrainwidth*SCALE/2.0))>=-15) ) {
         // cout << planex << " x "<< planey << " y "<< planez << endl;
@@ -271,7 +268,7 @@ bool check2(){
   for(int i=0;i<stars.size();i++){
     if(stars[stars.size()-i-1].second+40<planey){
       // cout<<"hh"<<endl;
-      break;
+      return false;
     }
     else{
       // cout<<"here"<<endl;
@@ -283,6 +280,7 @@ bool check2(){
       }
     }
   }
+  return false;
 }
 
 
@@ -628,7 +626,7 @@ void init()
    Objectrender hous("House.obj","wall.bmp");
    Objectrender tre("Palm.obj","Palm.bmp");
    Objectrender cub("cube.obj","cube.bmp");
-   Objectrender sta("star.obj","cube.bmp");
+   Objectrender sta("coin.obj","coin.bmp");
    Objectrender toru("toru.obj","ball.bmp");
    cerr << "error crossed"<< endl;
    a.Read();
