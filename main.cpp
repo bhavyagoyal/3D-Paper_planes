@@ -8,7 +8,7 @@
 using namespace std;
 
 
-terrain a("hm1.bmp","tex.bmp"),b("hm1.bmp","tex.bmp"),c("hm1.bmp","tex.bmp"),foun("Palm.bmp","Palm.bmp");
+terrain a("hm1.bmp","tex.bmp"),b("hm1.bmp","tex.bmp"),c("hm1.bmp","tex.bmp"),foun("Palm.bmp","Palm.bmp"),d("menu1.bmp","menu1.bmp"),play("play.bmp","play.bmp"),exitm("exit.bmp","exit.bmp");
 int front=1,viewx,viewy;
 bool* keyStates = new bool[256];
 GLuint plane,house,tree,star,terrain1,terrain2,terrain3,cube,torus;
@@ -32,11 +32,18 @@ void keyOperations (void) {
     }
     if(keyStates[GLUT_KEY_F6])
     {
-       planey+=100*refreshMills/1000.0+min((planey)*200*refreshMills/(1000.0*1000.0),200*refreshMills/1000.0);
+       planey+=100*refreshMills/1000.0+min((planey)*200*refreshMills/(1000.0*1000.0),200*refreshMills/1000.0)+1;
     }
 }
 
 void keyPressed (int key, int x, int y) {
+
+
+
+
+
+
+
   if(!pauseflag){
 keyStates[key] = true;
 //cout << "x " << x << " y "<< y << endl;
@@ -309,6 +316,8 @@ void display(void)
   if(!start1)
   {
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_LIGHTING);
          glMatrixMode(GL_PROJECTION);
          glLoadIdentity();
          glOrtho(-10,10,-10,10,-10,10);
@@ -317,7 +326,7 @@ void display(void)
 
 
          glEnable(GL_TEXTURE_2D);
-          glBindTexture(GL_TEXTURE_2D, a.ad.Terrainid);
+          glBindTexture(GL_TEXTURE_2D, d.ad.Terrainid);
          glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
         glColor3f(1,1,1);
 
@@ -331,6 +340,41 @@ void display(void)
             glTexCoord2f(0,0);
             glVertex3f(-10,-10,0);
           glEnd();
+      
+          glColor3f(0.5,0.5,0);
+       
+          glBindTexture(GL_TEXTURE_2D, play.ad.Terrainid);
+         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+          glBegin(GL_POLYGON);
+          glTexCoord2f(0,0);
+          glVertex3f(-7,-2,0);
+          glTexCoord2f(0,1);
+          glVertex3f(-7,2,0);
+          glTexCoord2f(1,1);
+          glVertex3f(-3,2,0);
+          glTexCoord2f(1,0);
+          glVertex3f(-3,-2,0);
+        glEnd();
+
+        glBindTexture(GL_TEXTURE_2D, exitm.ad.Terrainid);
+         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+        glBegin(GL_POLYGON);
+        glTexCoord2f(0,0);
+          glVertex3f(3,-2,0);
+          glTexCoord2f(0,1);
+          glVertex3f(3,2,0);
+          glTexCoord2f(1,1);
+          glVertex3f(7,2,0);
+          glTexCoord2f(1,0);
+          glVertex3f(7,-2,0);
+        glEnd();
+            glDisable(GL_TEXTURE_2D);
+        // glColor3f(1,1,1);
+        // string op3="Play Game";
+        // glRasterPos3f(-5,0,0);
+        // for(int i=0;i<op3.length();i++)
+        //          glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,op3[i]);
+            
         glFlush();
         glutSwapBuffers();
 
@@ -340,10 +384,10 @@ else{
   // cout<<a.terrainheight*SCALE/2.0<<" "<<a.terrainwidth*SCALE/2.0<<endl;
    random_device rd;
    mt19937 gen(rd());
-   uniform_int_distribution<> dis(0, 2);
+   uniform_int_distribution<> dis(0, 8);
    
 glEnable(GL_LIGHTING);
-
+glEnable(GL_DEPTH_TEST);
 cout << "size "<< toruss.size() <<  " "<< trees.size() << " "<< stars.size() << endl;
    	keyOperations();
    	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -679,6 +723,8 @@ void init()
    a.Read();
    b.Read();
    c.Read();
+   d.Read();
+   play.Read();exitm.Read();
    foun.LoadFountain();
 
    _particleEngine=new ParticleEngine(foun.ad.Terrainid);
@@ -783,6 +829,27 @@ void timer(int value) {
    glutTimerFunc(refreshMills, timer, 0); // next timer call milliseconds later
 }
 
+void onMouseButton(int button, int state, int x, int y)
+{
+
+    if(button==GLUT_LEFT_BUTTON) {
+         double x1=x-viewx/2.0;double y1=y-viewy/2.0;
+         cout << "key s "<< x1 << " "<<y1<< " "<< viewx << " "<< viewy << endl;
+        if(!start1)
+        {
+          if(x1*2/viewx<=-0.3 && x1*2/viewx>=-0.7 && y1*2/viewy<=0.2 && y1*2/viewy>=-0.2)
+          {
+            start1=true;
+          }
+         else if(x1*2/viewx>=0.3 && x1*2/viewx<=0.7 && y1*2/viewy<=0.2 && y1*2/viewy>=-0.2)
+          {
+            exit(0);
+          }
+           
+        }
+
+    }
+}
 
 
 int main(int argc, char** argv)
@@ -798,6 +865,7 @@ int main(int argc, char** argv)
    glutReshapeFunc(reshape);
    glutSpecialFunc(keyPressed);
    glutSpecialUpFunc(keyUp);
+   glutMouseFunc(onMouseButton);
    glutTimerFunc(refreshMills,timer,0);
    glutPostRedisplay();
    glutMainLoop();
