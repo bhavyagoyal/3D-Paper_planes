@@ -17,7 +17,7 @@ double x,t1,t2,t3,planex,planez,planey,SCALE,HEIGHTSCALE;
 int t1obj=1,t2obj=1,t3obj=1;
 ParticleEngine* _particleEngine;GLfloat aspect;
 bool pauseflag=false,start1=false,start2=false;
-int score =0;
+int score =0,frmcnt=0;;
 vector<pair<double,double>> trees = {};
 vector<pair<double,double>> toruss = {};
 vector<pair<double,double>> stars = {};
@@ -37,13 +37,6 @@ void keyOperations (void) {
 }
 
 void keyPressed (int key, int x, int y) {
-
-
-
-
-
-
-
   if(!pauseflag){
 keyStates[key] = true;
 //cout << "x " << x << " y "<< y << endl;
@@ -396,8 +389,17 @@ cout << "size "<< toruss.size() <<  " "<< trees.size() << " "<< stars.size() << 
 	  gluPerspective(60.0f, aspect, 0.05f, 1000.0f);
    	glMatrixMode(GL_MODELVIEW);
    	glLoadIdentity();
-    gluLookAt(a.terrainheight*SCALE/2.0,-20+planey,15,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
-   
+    double c2,c3;
+    c2=-20+planey;c3=15;
+    if(pauseflag && frmcnt<10)
+    { 
+        if(frmcnt%2==0)
+          {c2+=1;c3+=0.5;}
+        else
+          {c2-=1;c3-=0.5;}
+        frmcnt++;    
+    }
+    gluLookAt(a.terrainheight*SCALE/2.0,-20+planey,c3,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
 
     glPushMatrix();
     glTranslatef(0,t1,0);
@@ -702,7 +704,7 @@ GLfloat light_position2[] = { 500, t3, 500.0, 1.0 };
 
 void init()
 {
-
+  frmcnt=0;
    for(int i=0;i<256;i++)
    	keyStates[i]=false;
   glEnable(GL_DEPTH_TEST);
