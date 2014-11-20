@@ -372,6 +372,72 @@ void display(void)
         glutSwapBuffers();
 
   }
+  else if(start2) 
+  { 
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_LIGHTING);
+         glMatrixMode(GL_PROJECTION);
+         glLoadIdentity();
+         glOrtho(-10,10,-10,10,-10,10);
+         glMatrixMode(GL_MODELVIEW);
+         glLoadIdentity();
+
+
+         glEnable(GL_TEXTURE_2D);
+          glBindTexture(GL_TEXTURE_2D, d.ad.Terrainid);
+         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+        glColor3f(1,1,1);
+
+          glBegin(GL_POLYGON);
+            glTexCoord2f(1,0);
+            glVertex3f(10,-10,0);
+            glTexCoord2f(1,1);
+            glVertex3f(10,10,0);
+            glTexCoord2f(0,1);
+            glVertex3f(-10,10,0);
+            glTexCoord2f(0,0);
+            glVertex3f(-10,-10,0);
+          glEnd();
+      
+          glColor3f(0.5,0.5,0);
+       
+          glBindTexture(GL_TEXTURE_2D, play.ad.Terrainid);
+         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+          glBegin(GL_POLYGON);
+          glTexCoord2f(0,0);
+          glVertex3f(-7,-2,0);
+          glTexCoord2f(0,1);
+          glVertex3f(-7,2,0);
+          glTexCoord2f(1,1);
+          glVertex3f(-3,2,0);
+          glTexCoord2f(1,0);
+          glVertex3f(-3,-2,0);
+        glEnd();
+
+        glBindTexture(GL_TEXTURE_2D, exitm.ad.Terrainid);
+         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+        glBegin(GL_POLYGON);
+        glTexCoord2f(0,0);
+          glVertex3f(3,-2,0);
+          glTexCoord2f(0,1);
+          glVertex3f(3,2,0);
+          glTexCoord2f(1,1);
+          glVertex3f(7,2,0);
+          glTexCoord2f(1,0);
+          glVertex3f(7,-2,0);
+        glEnd();
+            glDisable(GL_TEXTURE_2D);
+        glColor3f(1,1,1);
+        string op3="Hi ";
+        glRasterPos3f(0,0,0);
+        for(int i=0;i<op3.length();i++)
+                 glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,op3[i]);
+            
+        glFlush();
+        glutSwapBuffers();
+
+  }
 else{
 
   // cout<<a.terrainheight*SCALE/2.0<<" "<<a.terrainwidth*SCALE/2.0<<endl;
@@ -418,6 +484,8 @@ cout << "size "<< toruss.size() <<  " "<< trees.size() << " "<< stars.size() << 
           {c2-=1;c3-=0.5;}
         frmcnt++;    
     }
+    if(frmcnt==10)
+      start2=true;
     gluLookAt(a.terrainheight*SCALE/2.0,-20+planey,c3,a.terrainheight*SCALE/2.0,planey,10,0,0,1);
 
     glPushMatrix();
@@ -767,8 +835,7 @@ void init()
    // toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t1+(a.terrainwidth)*SCALE/2.0));
 
 
-   planex=a.terrainwidth*SCALE/2.0;
-   planez=10.0;
+  
    
    plane = glGenLists(1);
    glNewList(plane, GL_COMPILE);
@@ -856,11 +923,12 @@ void onMouseButton(int button, int state, int x, int y)
     if(button==GLUT_LEFT_BUTTON) {
          double x1=x-viewx/2.0;double y1=y-viewy/2.0;
          cout << "key s "<< x1 << " "<<y1<< " "<< viewx << " "<< viewy << endl;
-        if(!start1)
+        if(!start1 || start2)
         {
           if(x1*2/viewx<=-0.3 && x1*2/viewx>=-0.7 && y1*2/viewy<=0.2 && y1*2/viewy>=-0.2)
           {
-            start1=true;
+            start1=true;start2=false; planex=a.terrainwidth*SCALE/2.0;
+                planez=10.0;t1=0;t2=a.terrainwidth*SCALE;t3=t2+b.terrainwidth*SCALE;planey=0,frmcnt=0;pauseflag=false;
           }
          else if(x1*2/viewx>=0.3 && x1*2/viewx<=0.7 && y1*2/viewy<=0.2 && y1*2/viewy>=-0.2)
           {
