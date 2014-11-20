@@ -779,7 +779,7 @@ GLfloat light_position2[] = { 500, t3, 500.0, 1.0 };
          glOrtho(-10,10,-10,10,-10,10);
          glMatrixMode(GL_MODELVIEW);
          glLoadIdentity();
-         HUD(-9.5,9,0);
+       //  HUD(-9.5,9,0);
    glFlush ();
    glutSwapBuffers();}
 
@@ -929,6 +929,17 @@ void onMouseButton(int button, int state, int x, int y)
           {
             start1=true;start2=false; planex=a.terrainwidth*SCALE/2.0;
                 planez=10.0;t1=0;t2=a.terrainwidth*SCALE;t3=t2+b.terrainwidth*SCALE;planey=0,frmcnt=0;pauseflag=false;
+                 x=0;
+                  front=1;
+ starang=0;
+ t1obj=1;t2obj=1;t3obj=1;
+ pauseflag=false;start2=false;
+ score =0;frmcnt=0;
+trees = {};
+ toruss = {};
+ stars = {};
+
+
           }
          else if(x1*2/viewx>=0.3 && x1*2/viewx<=0.7 && y1*2/viewy<=0.2 && y1*2/viewy>=-0.2)
           {
