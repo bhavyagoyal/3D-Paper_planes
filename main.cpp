@@ -278,9 +278,9 @@ bool check2(){
     else{
       // cout<<"here"<<endl;
       // cout<<abs(planey-trees[trees.size()-i-1].second)<<" "<<abs(planex-trees[trees.size()-i-1].second)<< endl;
-      if( abs(planey-stars[stars.size()-i-1].second)<=2 && ((planex-stars[stars.size()-i-1].first)*(planex-stars[stars.size()-i-1].first)+(planez-10)*(planez-10))<=4){
+      if( abs(planey-stars[stars.size()-i-1].second)<=3 && ((planex-stars[stars.size()-i-1].first)*(planex-stars[stars.size()-i-1].first)+(planez-10)*(planez-10))<=4){
         cout<<"star"<<endl;
-        stars.erase(stars.begin()+stars.size()-i);
+        stars.erase(stars.begin()+stars.size()-i-1);
         return true;
 
       }
@@ -831,7 +831,7 @@ void init()
    // toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t2+(a.terrainwidth)*SCALE/2.0));
 
 
-   stars.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t1+(a.terrainwidth)*SCALE/2.0));
+   stars.push_back(make_pair(a.terrainheight*SCALE/2.0 +7,t1+(a.terrainwidth)*SCALE/2.0));
    // toruss.push_back(make_pair(a.terrainheight*SCALE/2.0 ,t1+(a.terrainwidth)*SCALE/2.0));
 
 
