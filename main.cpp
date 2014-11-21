@@ -297,7 +297,17 @@ void HUD(const int x, const int y,const int z)
     glVertex3f(x+4,y+1,z);
     glVertex3f(x+4,y-0.9,z);
     glVertex3f(x-1,y-0.9,z);
-  glEnd();
+     glEnd();
+    glTranslatef(x,y,z);
+    stringstream ss;
+      ss << score;
+      string op3="Score :";
+      glColor3f(1,1,1);
+         op3.append(ss.str());
+        glRasterPos3f(0,0,0);
+        for(int i=0;i<op3.length();i++)
+                 glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,op3[i]);
+ 
 }
 
 
@@ -428,8 +438,26 @@ void display(void)
           glVertex3f(7,-2,0);
         glEnd();
             glDisable(GL_TEXTURE_2D);
+            glTranslatef(0,5,0);
+
         glColor3f(1,1,1);
-        string op3="Hi ";
+        glBegin(GL_POLYGON);
+        
+          glVertex3f(-2,-2,0);
+        
+          glVertex3f(-2,2,0);
+        
+          glVertex3f(2,2,0);
+        
+          glVertex3f(2,-2,0);
+        glEnd();
+        glColor3f(0.5,0.3,1.0);
+        glTranslatef(-1,0,0);
+        
+        stringstream ss;
+      ss << score;
+      string op3="Score :";
+         op3.append(ss.str());
         glRasterPos3f(0,0,0);
         for(int i=0;i<op3.length();i++)
                  glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,op3[i]);
@@ -779,7 +807,7 @@ GLfloat light_position2[] = { 500, t3, 500.0, 1.0 };
          glOrtho(-10,10,-10,10,-10,10);
          glMatrixMode(GL_MODELVIEW);
          glLoadIdentity();
-       //  HUD(-9.5,9,0);
+        HUD(-9.5,9,0);
    glFlush ();
    glutSwapBuffers();}
 
